@@ -16,6 +16,9 @@ import { P2PRoute } from './games/P2PRoute';
 import { ConfigEnum } from './games/ConfigEnum';
 import { MsiSetup } from './games/MsiSetup';
 import { AerTriage } from './games/AerTriage';
+import { DmiLink } from './games/DmiLink';
+import { NvmeMap } from './games/NvmeMap';
+import { CxlType } from './games/CxlType';
 import { loadCleared, markCleared } from './data/progress';
 import type { MicrogameId, RoundResult, Screen } from './types';
 
@@ -137,5 +140,9 @@ export default function App() {
   if (screen === 'p2p-route') return <P2PRoute {...common} />;
   if (screen === 'config-enum') return <ConfigEnum {...common} />;
   if (screen === 'msi-setup') return <MsiSetup {...common} />;
+  if (screen === 'aer-triage') return <AerTriage {...common} />;
+  if (screen === 'dmi-link') return <DmiLink {...common} />;
+  if (screen === 'nvme-map') return <NvmeMap {...common} />;
+  if (screen === 'cxl-type') return <CxlType {...common} />;
   return <AerTriage {...common} />;
 }

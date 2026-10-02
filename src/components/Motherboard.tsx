@@ -12,11 +12,12 @@ export interface ChapterAnchor {
 
 export const CHAPTER_ANCHORS: ChapterAnchor[] = [
   { chapter: 'fundamentals', label: 'Fundamentals', x: 22, y: 28, hint: 'CPU link' },
-  { chapter: 'bandwidth', label: 'Bandwidth', x: 42, y: 82, hint: '×16 slot' },
+  { chapter: 'bandwidth', label: 'Bandwidth', x: 42, y: 82, hint: '\u00d716 slot' },
   { chapter: 'topology', label: 'Topology', x: 58, y: 52, hint: 'bifur lanes' },
   { chapter: 'tradeoffs', label: 'Tradeoffs', x: 86, y: 24, hint: 'SA desk' },
   { chapter: 'fabric', label: 'Fabric', x: 18, y: 58, hint: 'switch' },
   { chapter: 'drivers', label: 'Drivers', x: 78, y: 42, hint: 'IRQ / AER' },
+  { chapter: 'attach', label: 'Attach', x: 48, y: 18, hint: 'CXL / DMI / NVMe' },
 ];
 
 interface MotherboardProps {
@@ -51,7 +52,7 @@ export function Motherboard({ cleared, onPlay, onFocusChapter }: MotherboardProp
                   className={`mb-anchor${unlocked ? '' : ' locked'}${done ? ' cleared' : ''}`}
                   style={{ position: 'relative', transform: 'none', left: 'auto', top: 'auto' }}
                   disabled={!unlocked || !playId}
-                  title={unlocked ? `${ch.title} — ${a.hint}` : 'Clear the previous chapter first'}
+                  title={unlocked ? `${ch.title} \u2014 ${a.hint}` : 'Clear the previous chapter first'}
                   onClick={() => {
                     if (!unlocked || !playId) return;
                     onFocusChapter?.(a.chapter);
@@ -69,7 +70,7 @@ export function Motherboard({ cleared, onPlay, onFocusChapter }: MotherboardProp
           </div>
         </div>
       </div>
-      <p className="mb-caption">Platform map — chapter markers jump to the first open drill. Use the cards above to browse every game.</p>
+      <p className="mb-caption">Platform map \u2014 chapter markers jump to the first open drill. Use the cards above to browse every game.</p>
     </section>
   );
 }
