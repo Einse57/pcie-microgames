@@ -13,6 +13,9 @@ import { TradeoffBoss } from './games/TradeoffBoss';
 import { RootVsSwitch } from './games/RootVsSwitch';
 import { DmaPath } from './games/DmaPath';
 import { P2PRoute } from './games/P2PRoute';
+import { ConfigEnum } from './games/ConfigEnum';
+import { MsiSetup } from './games/MsiSetup';
+import { AerTriage } from './games/AerTriage';
 import { loadCleared, markCleared } from './data/progress';
 import type { MicrogameId, RoundResult, Screen } from './types';
 
@@ -131,5 +134,8 @@ export default function App() {
   if (screen === 'tradeoff-boss') return <TradeoffBoss {...common} />;
   if (screen === 'root-vs-switch') return <RootVsSwitch {...common} />;
   if (screen === 'dma-path') return <DmaPath {...common} />;
-  return <P2PRoute {...common} />;
+  if (screen === 'p2p-route') return <P2PRoute {...common} />;
+  if (screen === 'config-enum') return <ConfigEnum {...common} />;
+  if (screen === 'msi-setup') return <MsiSetup {...common} />;
+  return <AerTriage {...common} />;
 }

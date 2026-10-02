@@ -12,6 +12,9 @@ import { TradeoffBoss } from '../games/TradeoffBoss';
 import { RootVsSwitch } from '../games/RootVsSwitch';
 import { DmaPath } from '../games/DmaPath';
 import { P2PRoute } from '../games/P2PRoute';
+import { ConfigEnum } from '../games/ConfigEnum';
+import { MsiSetup } from '../games/MsiSetup';
+import { AerTriage } from '../games/AerTriage';
 
 interface CampaignProps {
   sessionTime: number;
@@ -52,6 +55,12 @@ function renderGame(
       return <DmaPath {...common} />;
     case 'p2p-route':
       return <P2PRoute {...common} />;
+    case 'config-enum':
+      return <ConfigEnum {...common} />;
+    case 'msi-setup':
+      return <MsiSetup {...common} />;
+    case 'aer-triage':
+      return <AerTriage {...common} />;
   }
 }
 
