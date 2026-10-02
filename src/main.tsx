@@ -6,6 +6,7 @@ import './styles-visual.css';
 import './styles-fabric.css';
 import './styles-motherboard.css';
 import './styles-drivers.css';
+import './styles-attach.css';
 import App from './App';
 
 createRoot(document.getElementById('root')!).render(

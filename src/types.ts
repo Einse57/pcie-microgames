@@ -15,6 +15,9 @@ export type Screen =
   | 'config-enum'
   | 'msi-setup'
   | 'aer-triage'
+  | 'dmi-link'
+  | 'nvme-map'
+  | 'cxl-type'
   | 'result';
 
 export type MicrogameId =
@@ -31,7 +34,10 @@ export type MicrogameId =
   | 'p2p-route'
   | 'config-enum'
   | 'msi-setup'
-  | 'aer-triage';
+  | 'aer-triage'
+  | 'dmi-link'
+  | 'nvme-map'
+  | 'cxl-type';
 
 export type ChapterId =
   | 'fundamentals'
@@ -39,7 +45,8 @@ export type ChapterId =
   | 'topology'
   | 'tradeoffs'
   | 'fabric'
-  | 'drivers';
+  | 'drivers'
+  | 'attach';
 
 export type GameOutcome = 'win' | 'lose' | null;
 
