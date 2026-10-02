@@ -71,6 +71,21 @@ const FAILS: Record<MicrogameId, string[]> = {
     'Bad TLP / UR are typically non-fatal — advisory recovery.',
     'Fatal may need link or device reset — not a soft clear alone.',
   ],
+  'dmi-link': [
+    'Chipset traffic rides DMI to the PCH — not the PEG ×16 GPU slot.',
+    'PEG ×16 is for discrete GPU endpoints; DMI is the chipset link.',
+    'Do not treat DMI like a general PCIe endpoint slot.',
+  ],
+  'nvme-map': [
+    'NVMe sits on a ×4 PCIe path as an endpoint — not SATA/AHCI.',
+    'Pick the matching form factor for that ×4 seat.',
+    'Admin queue is control; I/O queue pairs carry the data path.',
+  ],
+  'cxl-type': [
+    'Type 3 is memory expander; Type 1 is accel+cache; Type 2 adds device memory.',
+    'CXL.io is PCIe-like I/O; .cache is coherency; .mem is memory access.',
+    'Match the silhouette to the CXL Type before binning protocols.',
+  ],
 };
 
 export function randomFail(id: MicrogameId): string {
@@ -93,6 +108,9 @@ export const WIN_STRINGS: Record<MicrogameId, string[]> = {
   'config-enum': ['Config walk complete — Type0/Type1 sorted.', 'Hierarchy enumerated; BARs can be claimed next.', 'BDF tree walk looks clean.'],
   'msi-setup': ['Interrupt path armed — vectors cover every queue.', 'MSI / MSI-X upgrade looks right for the device.', 'IRQ mode matches the queue budget.'],
   'aer-triage': ['AER severity and recovery action match.', 'Correctable vs fatal triage complete.', 'Error log routed to the right recovery bin.'],
+  'dmi-link': ['DMI vs PEG path locked in.', 'Chipset traffic on DMI — GPU on PEG.', 'CPU↔PCH link distinguished from the GPU slot.'],
+  'nvme-map': ['NVMe seated on ×4 as a PCIe endpoint.', 'Protocol and queues look right.', 'M.2/U.2/AIC mapped onto PCIe — not SATA.'],
+  'cxl-type': ['CXL Type match looks solid.', 'Protocol lane binned: .io / .cache / .mem.', 'Type 1/2/3 roles sorted over the PCIe PHY.'],
 };
 
 export function randomWin(id: MicrogameId): string {
