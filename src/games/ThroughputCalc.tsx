@@ -5,26 +5,15 @@ import {
   aggregateGBps,
   formatGBps,
   GEN_LABEL,
-  REFERENCE_CARD_LINES,
+  LANE_WIDTHS,
+  PER_LANE_GBPS,
 } from '../data/pcieBandwidth';
 
 interface Problem {
-  gen: number;
-  lanes: number;
-  answer: number;
-  choices: number[];
-}
-
-function uniqueChoices(correct: number, pool: number[]): number[] {
-  const set = new Set<number>([correct]);
-  for (const p of pool.sort(() => Math.random() - 0.5)) {
-    if (set.size >= 4) break;
-    if (Math.abs(p - correct) > 0.01) set.add(p);
-  }
-  while (set.size < 4) {
-    set.add(correct * (set.size % 2 === 0 ? 2 : 0.5));
-  }
-  return [...set].sort((a, b) => a - b);
+  target: number;
+  /** Any valid Gen×lanes that hit the target (for teaching); win if player hits exact target */
+  answerGen: number;
+  answerLanes: number;
 }
 
 function buildProblems(n: number): Problem[] {
@@ -37,20 +26,16 @@ function buildProblems(n: number): Problem[] {
     { gen: 4, lanes: 16 },
     { gen: 5, lanes: 4 },
     { gen: 5, lanes: 8 },
-    { gen: 5, lanes: 16 },
     { gen: 2, lanes: 8 },
   ];
-  const picked = [...combos].sort(() => Math.random() - 0.5).slice(0, n);
-  const allAnswers = combos.map((c) => aggregateGBps(c.gen, c.lanes));
-
-  return picked.map((c) => {
-    const answer = aggregateGBps(c.gen, c.lanes);
-    return {
-      ...c,
-      answer,
-      choices: uniqueChoices(answer, allAnswers),
-    };
-  });
+  return [...combos]
+    .sort(() => Math.random() - 0.5)
+    .slice(0, n)
+    .map((c) => ({
+      target: aggregateGBps(c.gen, c.lanes),
+      answerGen: c.gen,
+      answerLanes: c.lanes,
+    }));
 }
 
 interface Props {
@@ -62,8 +47,22 @@ interface Props {
 export function ThroughputCalc({ sessionTime, onComplete, onAbort }: Props) {
   const problems = useMemo(() => buildProblems(4), []);
   const [index, setIndex] = useState(0);
-  const [peek, setPeek] = useState(false);
+  const [gen, setGen] = useState<number | null>(null);
+  const [lanes, setLanes] = useState<number | null>(null);
   const current = problems[index];
+
+  const fill = gen != null && lanes != null ? aggregateGBps(gen, lanes) : 0;
+  const maxMeter = Math.max(current.target * 1.25, 64);
+  const fillPct = Math.min(100, (fill / maxMeter) * 100);
+  const targetPct = Math.min(100, (current.target / maxMeter) * 100);
+  const exact = gen != null && lanes != null && Math.abs(fill - current.target) < 0.01;
+  const over = fill > current.target + 0.01;
+  const under = fill > 0 && fill < current.target - 0.01;
+
+  const resetPick = () => {
+    setGen(null);
+    setLanes(null);
+  };
 
   return (
     <GameShell
@@ -75,57 +74,97 @@ export function ThroughputCalc({ sessionTime, onComplete, onAbort }: Props) {
       {({ win, mistake, locked }) => (
         <div className="mg throughput-calc">
           <p className="prompt">
-            Approximate unidirectional aggregate BW. ({index + 1}/{problems.length})
+            Fill the pipe to <strong>{formatGBps(current.target)}</strong>. ({index + 1}/
+            {problems.length})
           </p>
-          <div className="scenario-card">
-            <span className="packet-chip">GEN × LANES</span>
-            <h2>
-              {GEN_LABEL[current.gen]} ×{current.lanes}
-            </h2>
-            <p className="scenario-detail">Select the closest taught approximate aggregate.</p>
+
+          <div className="pipe-meter" aria-label="Capacity meter">
+            <div className="pipe-track">
+              <div
+                className={`pipe-fill${exact ? ' ok' : over ? ' over' : under ? ' under' : ''}`}
+                style={{ width: `${fillPct}%` }}
+              />
+              <div className="pipe-target-mark" style={{ left: `${targetPct}%` }} title="target" />
+            </div>
+            <div className="pipe-labels">
+              <span>
+                {fill > 0 ? formatGBps(fill) : '—'}
+                {gen != null && lanes != null ? ` · ${GEN_LABEL[gen]} ×${lanes}` : ''}
+              </span>
+              <span className="pipe-target-label">🎯 {formatGBps(current.target)}</span>
+            </div>
           </div>
 
-          <div className="ref-peek">
-            <button
-              type="button"
-              className="ghost-btn peek-btn"
-              disabled={locked}
-              onClick={() => setPeek((p) => !p)}
-            >
-              {peek ? 'Hide reference card' : 'Peek reference card'}
-            </button>
-            {peek && (
-              <aside className="ref-card" aria-label="Bandwidth reference">
-                {REFERENCE_CARD_LINES.map((line) => (
-                  <p key={line}>{line}</p>
-                ))}
-              </aside>
-            )}
-          </div>
-
-          <div className="choice-grid">
-            {current.choices.map((c) => (
-              <button
-                key={c}
-                type="button"
-                className="width-btn"
-                disabled={locked}
-                onClick={() => {
-                  if (locked) return;
-                  const ok = Math.abs(c - current.answer) < 0.01;
-                  if (!ok) {
-                    mistake(randomFail('throughput-calc'));
-                    return;
-                  }
-                  if (index + 1 >= problems.length) win();
-                  else setIndex((i) => i + 1);
-                }}
-              >
-                <strong>{formatGBps(c)}</strong>
-                <small>aggregate</small>
-              </button>
+          <div className="per-lane-legend" aria-label="Per-lane legend">
+            {[3, 4, 5].map((g) => (
+              <span key={g} className="legend-item">
+                <i className={`legend-bar g${g}`} style={{ height: `${(PER_LANE_GBPS[g] / 4) * 18}px` }} />
+                {GEN_LABEL[g]} {formatGBps(PER_LANE_GBPS[g])}
+              </span>
             ))}
           </div>
+
+          <div className="pipe-pickers">
+            <div className="picker-col" role="group" aria-label="Generation">
+              <span className="picker-label">Gen</span>
+              <div className="picker-row">
+                {[3, 4, 5].map((g) => (
+                  <button
+                    key={g}
+                    type="button"
+                    className={`tile-btn${gen === g ? ' selected' : ''}`}
+                    disabled={locked}
+                    onClick={() => setGen(g)}
+                  >
+                    <strong>{GEN_LABEL[g]}</strong>
+                    <small>{formatGBps(PER_LANE_GBPS[g])}/L</small>
+                  </button>
+                ))}
+              </div>
+            </div>
+            <div className="picker-col" role="group" aria-label="Lane width">
+              <span className="picker-label">Width</span>
+              <div className="picker-row">
+                {LANE_WIDTHS.map((w) => (
+                  <button
+                    key={w}
+                    type="button"
+                    className={`tile-btn${lanes === w ? ' selected' : ''}`}
+                    disabled={locked}
+                    onClick={() => setLanes(w)}
+                  >
+                    <span className="mini-lanes" aria-hidden>
+                      {Array.from({ length: Math.min(w, 8) }, (_, i) => (
+                        <i key={i} />
+                      ))}
+                      {w > 8 ? <em>+{w - 8}</em> : null}
+                    </span>
+                    <strong>×{w}</strong>
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          <button
+            type="button"
+            className="primary-btn train-btn"
+            disabled={locked || gen == null || lanes == null}
+            onClick={() => {
+              if (gen == null || lanes == null) return;
+              if (!exact) {
+                mistake(randomFail('throughput-calc'));
+                return;
+              }
+              if (index + 1 >= problems.length) win();
+              else {
+                setIndex((i) => i + 1);
+                resetPick();
+              }
+            }}
+          >
+            Lock fill →
+          </button>
         </div>
       )}
     </GameShell>
