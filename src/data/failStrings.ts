@@ -2,25 +2,25 @@ import type { MicrogameId } from '../types';
 
 const FAILS: Record<MicrogameId, string[]> = {
   'link-training': [
-    'Your LTSSM got stuck in Recovery — again.',
-    'Gen mismatch! Downstream thinks Gen1, you yelled Gen5.',
-    'Lane deskew failed. Those lanes are not best friends.',
-    'Training sets timed out. The link ghosted you.',
-    'Equalization flopped. Your eye diagram just blinked.',
+    'LTSSM stuck in Recovery — renegotiate Gen and realign lanes.',
+    'Gen mismatch: downstream advertised a different speed.',
+    'Lane deskew failed. Align all four lanes before training.',
+    'Training timed out. Keep Gen and lanes consistent, then retry.',
+    'Equalization failed. Recheck speed selection and lane state.',
   ],
   'packet-sort': [
-    'That was a DLLP, not a TLP. Data Link layer says hi.',
-    'Ordered Sets live on the wire — not in Transaction layer!',
-    'You filed an ACK as a Memory Write. Chaos ensues.',
-    'SKP ordered set escaped into your TLP bin. Naughty.',
-    'Credit update is a DLLP. Spec 0xFF is laughing at you.',
+    'That was a DLLP, not a TLP — Data Link layer.',
+    'Ordered Sets belong on the Physical layer, not Transaction.',
+    'ACK is a DLLP, not a Memory Write TLP.',
+    'SKP is an Ordered Set — Physical layer bin.',
+    'Flow-control credit updates are DLLPs.',
   ],
   'bar-claim': [
-    'BAR overlap! Two devices, one address — MMIO war.',
-    'You parked on the VGA hole. Classic rookie move.',
-    'Window too wide — ate the next endpoint for lunch.',
-    'Unaligned BAR. Hardware coughs politely, then dies.',
-    'That region was already claimed. Enumerate harder.',
+    'BAR overlap: two devices cannot share the same MMIO range.',
+    'That lands on the VGA hole — shift the window.',
+    'Window too wide or out of bounds for the map.',
+    'Unaligned / conflicting BAR — pick a free span.',
+    'Region already claimed. Choose an empty range.',
   ],
 };
 
@@ -31,19 +31,19 @@ export function randomFail(id: MicrogameId): string {
 
 export const WIN_STRINGS: Record<MicrogameId, string[]> = {
   'link-training': [
-    'Link Up! L0 achieved. Speed demons rejoice.',
-    'Gen locked. LTSSM is finally chill.',
-    'Lanes aligned. Deskew angels sing.',
+    'Link Up — L0 achieved.',
+    'Gen locked and lanes aligned.',
+    'Training complete. Deskew looks clean.',
   ],
   'packet-sort': [
-    'Layers sorted. Transaction / Data Link / Phy — clean.',
-    'Packet taxonomy mastered. Spec lawyers nod.',
-    'TLP/DLLP/OS triage complete. Nicely done.',
+    'Layers sorted: Transaction / Data Link / Physical.',
+    'Packet taxonomy correct.',
+    'TLP / DLLP / Ordered Set triage complete.',
   ],
   'bar-claim': [
-    'BAR claimed. MMIO window looks chef\'s-kiss.',
-    'No overlaps. Enumeration gods are pleased.',
-    'Address map tidy. Driver writers thank you.',
+    'BAR claimed — MMIO window is clean.',
+    'No overlaps. Enumeration can proceed.',
+    'Address map looks tidy.',
   ],
 };
 

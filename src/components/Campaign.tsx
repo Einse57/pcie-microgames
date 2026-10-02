@@ -6,22 +6,21 @@ import { PacketSort } from '../games/PacketSort';
 import { BarClaim } from '../games/BarClaim';
 
 interface CampaignProps {
-  score: number;
-  onScore: (delta: number) => void;
+  sessionTime: number;
+  onScore: (timeSeconds: number) => void;
   onDone: (results: RoundResult[]) => void;
   onAbort: () => void;
 }
 
-export function Campaign({ score, onScore, onDone, onAbort }: CampaignProps) {
+export function Campaign({ sessionTime, onScore, onDone, onAbort }: CampaignProps) {
   const [step, setStep] = useState(0);
   const [results, setResults] = useState<RoundResult[]>([]);
   const id = CAMPAIGN_ORDER[step];
 
-  const handleComplete = (won: boolean, failReason?: string) => {
-    const nextResults = [...results, { id, won, failReason }];
+  const handleComplete = (won: boolean, timeSeconds: number, failReason?: string) => {
+    const nextResults = [...results, { id, won, timeSeconds, failReason }];
     setResults(nextResults);
-    if (won) onScore(100);
-    else onScore(10);
+    onScore(timeSeconds);
 
     if (step + 1 >= CAMPAIGN_ORDER.length) {
       window.setTimeout(() => onDone(nextResults), 200);
@@ -31,7 +30,7 @@ export function Campaign({ score, onScore, onDone, onAbort }: CampaignProps) {
   };
 
   const common = {
-    score,
+    sessionTime,
     onComplete: handleComplete,
     onAbort,
   };
