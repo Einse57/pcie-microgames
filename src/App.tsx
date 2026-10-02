@@ -5,6 +5,12 @@ import { ResultScreen } from './components/ResultScreen';
 import { LinkTraining } from './games/LinkTraining';
 import { PacketSort } from './games/PacketSort';
 import { BarClaim } from './games/BarClaim';
+import { LaneWidths } from './games/LaneWidths';
+import { Generations } from './games/Generations';
+import { ThroughputCalc } from './games/ThroughputCalc';
+import { Bifurcation } from './games/Bifurcation';
+import { TradeoffBoss } from './games/TradeoffBoss';
+import { loadCleared, markCleared } from './data/progress';
 import type { MicrogameId, RoundResult, Screen } from './types';
 
 const BEST_KEY = 'pcie-microgames-best-time';
@@ -16,8 +22,10 @@ export default function App() {
   const [solo, setSolo] = useState<MicrogameId | null>(null);
   const [results, setResults] = useState<RoundResult[]>([]);
   const [lastCampaignTotal, setLastCampaignTotal] = useState<number | null>(null);
+  const [cleared, setCleared] = useState<Set<MicrogameId>>(() => new Set());
 
   useEffect(() => {
+    setCleared(loadCleared());
     const raw = localStorage.getItem(BEST_KEY);
     if (raw == null || raw === '') return;
     const stored = Number(raw);
@@ -26,6 +34,10 @@ export default function App() {
 
   const addTime = (timeSeconds: number) =>
     setSessionTime((s) => s + timeSeconds);
+
+  const noteClear = (id: MicrogameId) => {
+    setCleared(markCleared(id));
+  };
 
   const considerBest = (campaignTotal: number) => {
     setBestTime((prev) => {
@@ -40,6 +52,7 @@ export default function App() {
   const finishSolo = (won: boolean, timeSeconds: number, failReason?: string) => {
     if (!solo) return;
     addTime(timeSeconds);
+    if (won) noteClear(solo);
     setResults([{ id: solo, won, timeSeconds, failReason }]);
     setLastCampaignTotal(null);
     setScreen('result');
@@ -50,6 +63,7 @@ export default function App() {
       <Hub
         sessionTime={sessionTime}
         bestTime={bestTime}
+        cleared={cleared}
         onCampaign={() => {
           setResults([]);
           setLastCampaignTotal(null);
@@ -68,6 +82,7 @@ export default function App() {
       <Campaign
         sessionTime={sessionTime}
         onScore={addTime}
+        onClear={noteClear}
         onAbort={() => setScreen('hub')}
         onDone={(r) => {
           const total = r.reduce((sum, x) => sum + x.timeSeconds, 0);
@@ -105,5 +120,10 @@ export default function App() {
 
   if (screen === 'link-training') return <LinkTraining {...common} />;
   if (screen === 'packet-sort') return <PacketSort {...common} />;
-  return <BarClaim {...common} />;
+  if (screen === 'bar-claim') return <BarClaim {...common} />;
+  if (screen === 'lane-widths') return <LaneWidths {...common} />;
+  if (screen === 'generations') return <Generations {...common} />;
+  if (screen === 'throughput-calc') return <ThroughputCalc {...common} />;
+  if (screen === 'bifurcation') return <Bifurcation {...common} />;
+  return <TradeoffBoss {...common} />;
 }
