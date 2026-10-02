@@ -27,6 +27,7 @@ export function GameShell({ id, sessionTime, onComplete, onAbort, children }: Ga
   const [elapsed, setElapsed] = useState(0);
   const [locked, setLocked] = useState(false);
   const [banner, setBanner] = useState<{ kind: 'win' | 'mistake'; text: string } | null>(null);
+  const [showTip, setShowTip] = useState(true);
   const done = useRef(false);
   const penaltyRef = useRef(0);
   const startRef = useRef(performance.now());
@@ -53,6 +54,7 @@ export function GameShell({ id, sessionTime, onComplete, onAbort, children }: Ga
     setElapsed(0);
     setLocked(false);
     setBanner(null);
+    setShowTip(true);
 
     let raf = 0;
     const tick = () => {
@@ -93,6 +95,15 @@ export function GameShell({ id, sessionTime, onComplete, onAbort, children }: Ga
           TIME {formatTime(sessionTime)}
         </div>
       </header>
+      {showTip && (
+        <div className="teach-tip" role="note">
+          <span className="teach-tip-label">Tip</span>
+          <span>{meta.tip}</span>
+          <button type="button" className="tip-dismiss" onClick={() => setShowTip(false)} aria-label="Dismiss tip">
+            ✕
+          </button>
+        </div>
+      )}
       <TimerBar elapsed={elapsed} par={meta.seconds} />
       <div className="game-stage">
         {children({
