@@ -31,6 +31,12 @@ export const CHAPTERS: ChapterMeta[] = [
     blurb: 'Root ports, switches, DMA paths, and P2P vs host bounce.',
     order: 4,
   },
+  {
+    id: 'drivers',
+    title: '6 · Drivers / Platform',
+    blurb: 'Config walk, MSI/MSI-X vectors, and AER severity triage.',
+    order: 5,
+  },
 ];
 
 export const MICROGAMES: MicrogameMeta[] = [
@@ -144,9 +150,39 @@ export const MICROGAMES: MicrogameMeta[] = [
     chapter: 'fabric',
     hubSlot: { label: 'P2P', x: 86, y: 62 },
   },
+  {
+    id: 'config-enum',
+    title: 'Config Walk',
+    tagline: 'Walk the bus tree and spot Type0 vs Type1 headers.',
+    concept: 'Config space enumeration / BDF',
+    tip: 'Type1 = bridge config; Type0 = endpoint; software walks hierarchy to discover devices/BARs.',
+    seconds: 12,
+    chapter: 'drivers',
+    hubSlot: { label: 'Enum', x: 74, y: 18 },
+  },
+  {
+    id: 'msi-setup',
+    title: 'MSI Setup',
+    tagline: 'Upgrade INTx \u2192 MSI \u2192 MSI-X so queues get enough vectors.',
+    concept: 'INTx vs MSI vs MSI-X',
+    tip: 'Multi-queue needs one vector per queue \u2014 MSI-X scales; legacy INTx does not.',
+    seconds: 12,
+    chapter: 'drivers',
+    hubSlot: { label: 'IRQ', x: 34, y: 40 },
+  },
+  {
+    id: 'aer-triage',
+    title: 'AER Triage',
+    tagline: 'Bin correctable, non-fatal, and fatal errors \u2014 then pick recovery.',
+    concept: 'Advanced Error Reporting',
+    tip: 'Correctable: log & clear. Non-fatal: recoverable TLP issues. Fatal: may need link/device reset.',
+    seconds: 12,
+    chapter: 'drivers',
+    hubSlot: { label: 'AER', x: 90, y: 48 },
+  },
 ];
 
-/** Full campaign order: Fundamentals \u2192 Bandwidth \u2192 Topology \u2192 Tradeoffs \u2192 Fabric */
+/** Full campaign order: Fundamentals \u2192 Bandwidth \u2192 Topology \u2192 Tradeoffs \u2192 Fabric \u2192 Drivers */
 export const CAMPAIGN_ORDER: MicrogameId[] = [
   'link-training',
   'packet-sort',
@@ -159,6 +195,9 @@ export const CAMPAIGN_ORDER: MicrogameId[] = [
   'root-vs-switch',
   'dma-path',
   'p2p-route',
+  'config-enum',
+  'msi-setup',
+  'aer-triage',
 ];
 
 export function getMeta(id: MicrogameId): MicrogameMeta {
