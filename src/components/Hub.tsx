@@ -1,7 +1,8 @@
 import { CHAPTERS, gamesInChapter, MICROGAMES } from '../data/microgames';
 import { chapterUnlocked, gameUnlocked } from '../data/progress';
-import type { MicrogameId } from '../types';
+import type { ChapterId, MicrogameId } from '../types';
 import { formatTime } from '../types';
+import { Motherboard } from './Motherboard';
 
 interface HubProps {
   sessionTime: number;
@@ -13,6 +14,13 @@ interface HubProps {
 
 export function Hub({ sessionTime, bestTime, cleared, onPlay, onCampaign }: HubProps) {
   const clearedCount = MICROGAMES.filter((g) => cleared.has(g.id)).length;
+
+  const focusChapter = (chapter: ChapterId) => {
+    const el = document.getElementById(`chapter-${chapter}`);
+    el?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    el?.classList.add('chapter-flash');
+    window.setTimeout(() => el?.classList.remove('chapter-flash'), 900);
+  };
 
   return (
     <div className="hub">
@@ -40,6 +48,7 @@ export function Hub({ sessionTime, bestTime, cleared, onPlay, onCampaign }: HubP
           return (
             <div
               key={ch.id}
+              id={`chapter-${ch.id}`}
               className={`chapter-card${unlocked ? '' : ' locked'}${done ? ' complete' : ''}`}
             >
               <header className="chapter-head">
@@ -77,46 +86,11 @@ export function Hub({ sessionTime, bestTime, cleared, onPlay, onCampaign }: HubP
         })}
       </section>
 
-      <section className="motherboard" aria-label="Motherboard hub">
-        <div className="mb-pcb">
-          <div className="mb-socket cpu">CPU</div>
-          <div className="mb-chipset">PCH / Chipset</div>
-          <div className="mb-traces" />
-          <div className="mb-slot dimm a">DIMM</div>
-          <div className="mb-slot dimm b">DIMM</div>
-          <div className="mb-slot pcie">×16</div>
-          <div className="mb-slot m2">M.2</div>
-
-          {MICROGAMES.map((g) => {
-            const open = gameUnlocked(g.id, cleared);
-            return (
-              <button
-                key={g.id}
-                type="button"
-                className={`mb-hotspot${open ? '' : ' locked'}${cleared.has(g.id) ? ' cleared' : ''}`}
-                style={{ left: `${g.hubSlot.x}%`, top: `${g.hubSlot.y}%` }}
-                onClick={() => open && onPlay(g.id)}
-                disabled={!open}
-                title={open ? g.title : 'Locked'}
-              >
-                <span className="hotspot-pulse" />
-                <span className="hotspot-label">
-                  <strong>{g.title}</strong>
-                  <small>{open ? g.hubSlot.label : 'Locked'}</small>
-                </span>
-              </button>
-            );
-          })}
-        </div>
-        <p className="mb-hint">
-          Chapters unlock in order. Campaign plays the full path; solo drills use the same
-          elapsed-time scoring.
-        </p>
-      </section>
+      <Motherboard cleared={cleared} onPlay={onPlay} onFocusChapter={focusChapter} />
 
       <footer className="hub-foot">
         <span>Vite + React + TS · time-based scoring · Vercel</span>
-        <span>Fundamentals → Bandwidth → Bifurcation → Tradeoffs</span>
+        <span>Fundamentals → Bandwidth → Bifurcation → Tradeoffs → Fabric</span>
       </footer>
     </div>
   );

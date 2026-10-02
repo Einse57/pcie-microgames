@@ -4,6 +4,7 @@ import './index.css';
 import './styles-games.css';
 import './styles-visual.css';
 import './styles-fabric.css';
+import './styles-motherboard.css';
 import App from './App';
 
 createRoot(document.getElementById('root')!).render(
