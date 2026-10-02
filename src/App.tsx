@@ -6,7 +6,6 @@ import { LinkTraining } from './games/LinkTraining';
 import { PacketSort } from './games/PacketSort';
 import { BarClaim } from './games/BarClaim';
 import type { MicrogameId, RoundResult, Screen } from './types';
-import './App.css';
 
 const BEST_KEY = 'pcie-microgames-best';
 
