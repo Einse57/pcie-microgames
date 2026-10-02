@@ -15,12 +15,12 @@ function overlaps(a: Region, b: Region): boolean {
 }
 
 interface Props {
-  score: number;
-  onComplete: (won: boolean, failReason?: string) => void;
+  sessionTime: number;
+  onComplete: (won: boolean, timeSeconds: number, failReason?: string) => void;
   onAbort: () => void;
 }
 
-export function BarClaim({ score, onComplete, onAbort }: Props) {
+export function BarClaim({ sessionTime, onComplete, onAbort }: Props) {
   const occupied = useMemo<Region[]>(
     () => [
       { start: 0, size: 2, label: 'VGA' },
@@ -37,8 +37,8 @@ export function BarClaim({ score, onComplete, onAbort }: Props) {
   const inBounds = start + windowSize <= 16;
 
   return (
-    <GameShell id="bar-claim" score={score} onComplete={onComplete} onAbort={onAbort}>
-      {({ win, lose, locked }) => (
+    <GameShell id="bar-claim" sessionTime={sessionTime} onComplete={onComplete} onAbort={onAbort}>
+      {({ win, mistake, locked }) => (
         <div className="mg bar-claim">
           <p className="prompt">
             Place your <strong>{windowSize}-unit</strong> MMIO BAR without overlapping existing windows.
@@ -89,14 +89,16 @@ export function BarClaim({ score, onComplete, onAbort }: Props) {
               disabled={locked}
               onClick={() => {
                 if (!clash && inBounds) win();
-                else lose(randomFail('bar-claim'));
+                else mistake(randomFail('bar-claim'));
               }}
             >
               Claim BAR
             </button>
           </div>
           <p className={`bar-status${clash || !inBounds ? ' bad' : ' good'}`}>
-            {clash || !inBounds ? 'Overlap / OOB — enumeration will cry' : 'Clean window — claim it!'}
+            {clash || !inBounds
+              ? 'Overlap or out of bounds — adjust before claiming'
+              : 'Clear window — ready to claim'}
           </p>
         </div>
       )}

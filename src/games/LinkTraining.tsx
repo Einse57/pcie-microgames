@@ -11,12 +11,12 @@ const GENS = [
 ] as const;
 
 interface Props {
-  score: number;
-  onComplete: (won: boolean, failReason?: string) => void;
+  sessionTime: number;
+  onComplete: (won: boolean, timeSeconds: number, failReason?: string) => void;
   onAbort: () => void;
 }
 
-export function LinkTraining({ score, onComplete, onAbort }: Props) {
+export function LinkTraining({ sessionTime, onComplete, onAbort }: Props) {
   const target = useMemo(() => GENS[Math.floor(Math.random() * GENS.length)], []);
   const [picked, setPicked] = useState<number | null>(null);
   const [lanes, setLanes] = useState([false, false, false, false]);
@@ -24,12 +24,12 @@ export function LinkTraining({ score, onComplete, onAbort }: Props) {
   const allAligned = lanes.every(Boolean);
 
   return (
-    <GameShell id="link-training" score={score} onComplete={onComplete} onAbort={onAbort}>
-      {({ win, lose, locked }) => (
+    <GameShell id="link-training" sessionTime={sessionTime} onComplete={onComplete} onAbort={onAbort}>
+      {({ win, mistake, locked }) => (
         <div className="mg link-training">
           <p className="prompt">
             Downstream advertises <strong>{target.label}</strong> ({target.speed}).
-            Match Gen <em>and</em> align all 4 lanes!
+            Match Gen <em>and</em> align all 4 lanes.
           </p>
 
           <div className="gen-grid">
@@ -73,7 +73,7 @@ export function LinkTraining({ score, onComplete, onAbort }: Props) {
             disabled={locked || picked === null || !allAligned}
             onClick={() => {
               if (picked === target.id && allAligned) win();
-              else lose(randomFail('link-training'));
+              else mistake(randomFail('link-training'));
             }}
           >
             Train Link → L0

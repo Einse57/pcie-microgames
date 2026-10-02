@@ -37,23 +37,22 @@ function pickPackets(n: number): Packet[] {
 }
 
 interface Props {
-  score: number;
-  onComplete: (won: boolean, failReason?: string) => void;
+  sessionTime: number;
+  onComplete: (won: boolean, timeSeconds: number, failReason?: string) => void;
   onAbort: () => void;
 }
 
-export function PacketSort({ score, onComplete, onAbort }: Props) {
+export function PacketSort({ sessionTime, onComplete, onAbort }: Props) {
   const packets = useMemo(() => pickPackets(4), []);
   const [index, setIndex] = useState(0);
-  const [correct, setCorrect] = useState(0);
   const current = packets[index];
 
   return (
-    <GameShell id="packet-sort" score={score} onComplete={onComplete} onAbort={onAbort}>
-      {({ win, lose, locked }) => (
+    <GameShell id="packet-sort" sessionTime={sessionTime} onComplete={onComplete} onAbort={onAbort}>
+      {({ win, mistake, locked }) => (
         <div className="mg packet-sort">
           <p className="prompt">
-            Sort the packet into the right layer bin. ({index + 1}/{packets.length})
+            Sort the packet into the correct layer bin. ({index + 1}/{packets.length})
           </p>
 
           <div className="packet-card" key={current?.id}>
@@ -71,12 +70,10 @@ export function PacketSort({ score, onComplete, onAbort }: Props) {
                 onClick={() => {
                   if (!current || locked) return;
                   const ok = current.kind === b.kind;
-                  const nextCorrect = correct + (ok ? 1 : 0);
                   if (!ok) {
-                    lose(randomFail('packet-sort'));
+                    mistake(randomFail('packet-sort'));
                     return;
                   }
-                  setCorrect(nextCorrect);
                   if (index + 1 >= packets.length) {
                     win();
                   } else {
