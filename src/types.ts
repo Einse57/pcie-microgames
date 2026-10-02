@@ -4,9 +4,24 @@ export type Screen =
   | 'link-training'
   | 'packet-sort'
   | 'bar-claim'
+  | 'lane-widths'
+  | 'generations'
+  | 'throughput-calc'
+  | 'bifurcation'
+  | 'tradeoff-boss'
   | 'result';
 
-export type MicrogameId = 'link-training' | 'packet-sort' | 'bar-claim';
+export type MicrogameId =
+  | 'link-training'
+  | 'packet-sort'
+  | 'bar-claim'
+  | 'lane-widths'
+  | 'generations'
+  | 'throughput-calc'
+  | 'bifurcation'
+  | 'tradeoff-boss';
+
+export type ChapterId = 'fundamentals' | 'bandwidth' | 'topology' | 'tradeoffs';
 
 export type GameOutcome = 'win' | 'lose' | null;
 
@@ -15,9 +30,19 @@ export interface MicrogameMeta {
   title: string;
   tagline: string;
   concept: string;
+  /** One-line teach tip shown at game start */
+  tip: string;
   /** Soft reference duration (seconds) for the timer bar — not a fail limit */
   seconds: number;
+  chapter: ChapterId;
   hubSlot: { label: string; x: number; y: number };
+}
+
+export interface ChapterMeta {
+  id: ChapterId;
+  title: string;
+  blurb: string;
+  order: number;
 }
 
 export interface RoundResult {
