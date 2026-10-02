@@ -3,39 +3,45 @@ import type { ChapterId, ChapterMeta, MicrogameId, MicrogameMeta } from '../type
 export const CHAPTERS: ChapterMeta[] = [
   {
     id: 'fundamentals',
-    title: '1 · Fundamentals',
-    blurb: 'Links, packets, and BARs — how a device comes up on the bus.',
+    title: '1 \u00b7 Fundamentals',
+    blurb: 'Links, packets, and BARs \u2014 how a device comes up on the bus.',
     order: 0,
   },
   {
     id: 'bandwidth',
-    title: '2 · Bandwidth',
+    title: '2 \u00b7 Bandwidth',
     blurb: 'Widths, Gen ladder, and pipe-fill throughput puzzles.',
     order: 1,
   },
   {
     id: 'topology',
-    title: '3 · Topology / Bifurcation',
-    blurb: 'Carve an ×16 root into device lane blocks.',
+    title: '3 \u00b7 Topology / Bifurcation',
+    blurb: 'Carve an \u00d716 root into device lane blocks.',
     order: 2,
   },
   {
     id: 'tradeoffs',
-    title: '4 · Tradeoffs',
+    title: '4 \u00b7 Tradeoffs',
     blurb: 'Build a link under Gen/slot locks with least overkill.',
     order: 3,
   },
   {
     id: 'fabric',
-    title: '5 · Fabric / Ops',
+    title: '5 \u00b7 Fabric / Ops',
     blurb: 'Root ports, switches, DMA paths, and P2P vs host bounce.',
     order: 4,
   },
   {
     id: 'drivers',
-    title: '6 · Drivers / Platform',
+    title: '6 \u00b7 Drivers / Platform',
     blurb: 'Config walk, MSI/MSI-X vectors, and AER severity triage.',
     order: 5,
+  },
+  {
+    id: 'attach',
+    title: '7 \u00b7 Attach / CXL \u00b7 DMI \u00b7 NVMe',
+    blurb: 'Chipset DMI, NVMe as a PCIe endpoint, and CXL Types over a PCIe PHY.',
+    order: 6,
   },
 ];
 
@@ -180,9 +186,39 @@ export const MICROGAMES: MicrogameMeta[] = [
     chapter: 'drivers',
     hubSlot: { label: 'AER', x: 90, y: 48 },
   },
+  {
+    id: 'dmi-link',
+    title: 'DMI Link',
+    tagline: 'Route chipset traffic on DMI \u2014 not the PEG \u00d716 GPU slot.',
+    concept: 'DMI vs PEG / chipset link',
+    tip: 'DMI is the CPU\u2194PCH chipset link (proprietary-ish historically) \u2014 do not treat it like a general endpoint slot.',
+    seconds: 12,
+    chapter: 'attach',
+    hubSlot: { label: 'DMI', x: 24, y: 36 },
+  },
+  {
+    id: 'nvme-map',
+    title: 'NVMe Map',
+    tagline: 'Seat NVMe on \u00d74 PCIe and separate Admin vs I/O queues.',
+    concept: 'NVMe as PCIe endpoint',
+    tip: 'M.2 / U.2 / AIC NVMe is a PCIe endpoint using the NVMe protocol \u2014 not SATA/AHCI.',
+    seconds: 12,
+    chapter: 'attach',
+    hubSlot: { label: 'NVMe', x: 62, y: 70 },
+  },
+  {
+    id: 'cxl-type',
+    title: 'CXL Type',
+    tagline: 'Match Type 1/2/3 devices and bin CXL.io / .cache / .mem.',
+    concept: 'CXL Types & protocols',
+    tip: 'CXL rides a PCIe PHY: Type1 accel+cache, Type2 cache+mem, Type3 memory expander; protocols are .io / .cache / .mem.',
+    seconds: 14,
+    chapter: 'attach',
+    hubSlot: { label: 'CXL', x: 88, y: 54 },
+  },
 ];
 
-/** Full campaign order: Fundamentals \u2192 Bandwidth \u2192 Topology \u2192 Tradeoffs \u2192 Fabric \u2192 Drivers */
+/** Full campaign order: Fundamentals \u2192 Bandwidth \u2192 Topology \u2192 Tradeoffs \u2192 Fabric \u2192 Drivers \u2192 Attach */
 export const CAMPAIGN_ORDER: MicrogameId[] = [
   'link-training',
   'packet-sort',
@@ -198,6 +234,9 @@ export const CAMPAIGN_ORDER: MicrogameId[] = [
   'config-enum',
   'msi-setup',
   'aer-triage',
+  'dmi-link',
+  'nvme-map',
+  'cxl-type',
 ];
 
 export function getMeta(id: MicrogameId): MicrogameMeta {
