@@ -142,7 +142,7 @@ export function NvmeMap({ sessionTime, onComplete, onAbort }: Props) {
                   if (!placed) return;
                   if (advance() === 'win') win();
                 }}
-              >Lock on x4 -></button>
+              >{'Lock on x4 ->'}</button>
             </>
           )}
 
