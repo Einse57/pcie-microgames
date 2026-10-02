@@ -4,14 +4,16 @@ import { randomFail } from '../data/failStrings';
 import {
   aggregateGBps,
   formatGBps,
+  formatGBpsShort,
+  GEN_GTPS,
   GEN_LABEL,
   LANE_WIDTHS,
   PER_LANE_GBPS,
+  UNIT_KEY,
 } from '../data/pcieBandwidth';
 
 interface Problem {
   target: number;
-  /** Any valid Gen×lanes that hit the target (for teaching); win if player hits exact target */
   answerGen: number;
   answerLanes: number;
 }
@@ -73,12 +75,15 @@ export function ThroughputCalc({ sessionTime, onComplete, onAbort }: Props) {
     >
       {({ win, mistake, locked }) => (
         <div className="mg throughput-calc">
+          <p className="unit-key" title="Units">
+            {UNIT_KEY}
+          </p>
           <p className="prompt">
-            Fill the pipe to <strong>{formatGBps(current.target)}</strong>. ({index + 1}/
+            Fill the pipe to <strong>{formatGBps(current.target)}</strong> payload. ({index + 1}/
             {problems.length})
           </p>
 
-          <div className="pipe-meter" aria-label="Capacity meter">
+          <div className="pipe-meter" aria-label="Approx aggregate payload GB/s">
             <div className="pipe-track">
               <div
                 className={`pipe-fill${exact ? ' ok' : over ? ' over' : under ? ' under' : ''}`}
@@ -91,22 +96,27 @@ export function ThroughputCalc({ sessionTime, onComplete, onAbort }: Props) {
                 {fill > 0 ? formatGBps(fill) : '—'}
                 {gen != null && lanes != null ? ` · ${GEN_LABEL[gen]} ×${lanes}` : ''}
               </span>
-              <span className="pipe-target-label">🎯 {formatGBps(current.target)}</span>
+              <span className="pipe-target-label">
+                🎯 {formatGBps(current.target)} aggregate (payload)
+              </span>
             </div>
           </div>
 
-          <div className="per-lane-legend" aria-label="Per-lane legend">
+          <div className="per-lane-legend" aria-label="Per-lane payload legend">
             {[3, 4, 5].map((g) => (
               <span key={g} className="legend-item">
-                <i className={`legend-bar g${g}`} style={{ height: `${(PER_LANE_GBPS[g] / 4) * 18}px` }} />
-                {GEN_LABEL[g]} {formatGBps(PER_LANE_GBPS[g])}
+                <i
+                  className={`legend-bar g${g}`}
+                  style={{ height: `${(PER_LANE_GBPS[g] / 4) * 18}px` }}
+                />
+                {GEN_LABEL[g]} ≈ {formatGBpsShort(PER_LANE_GBPS[g])}/L
               </span>
             ))}
           </div>
 
           <div className="pipe-pickers">
             <div className="picker-col" role="group" aria-label="Generation">
-              <span className="picker-label">Gen</span>
+              <span className="picker-label">Gen (link rate)</span>
               <div className="picker-row">
                 {[3, 4, 5].map((g) => (
                   <button
@@ -117,7 +127,7 @@ export function ThroughputCalc({ sessionTime, onComplete, onAbort }: Props) {
                     onClick={() => setGen(g)}
                   >
                     <strong>{GEN_LABEL[g]}</strong>
-                    <small>{formatGBps(PER_LANE_GBPS[g])}/L</small>
+                    <small>{GEN_GTPS[g]}</small>
                   </button>
                 ))}
               </div>
