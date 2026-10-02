@@ -30,11 +30,22 @@ export function aggregateGBps(gen: number, lanes: number): number {
   return (PER_LANE_GBPS[gen] ?? 0) * lanes;
 }
 
+/** Format approx payload bandwidth; always includes a unit. */
 export function formatGBps(n: number): string {
+  if (n < 1) return `≈ ${(n * 1000).toFixed(0)} MB/s`;
+  if (Number.isInteger(n)) return `≈ ${n} GB/s`;
+  return `≈ ${n.toFixed(2)} GB/s`;
+}
+
+/** Compact payload label without leading ≈ (for tight UI chips). */
+export function formatGBpsShort(n: number): string {
   if (n < 1) return `${(n * 1000).toFixed(0)} MB/s`;
   if (Number.isInteger(n)) return `${n} GB/s`;
   return `${n.toFixed(2)} GB/s`;
 }
+
+/** Always-visible unit key for bandwidth / tradeoff games. */
+export const UNIT_KEY = 'GT/s = link rate · GB/s ≈ payload BW';
 
 /** Reference card lines for the throughput drill peek. */
 export const REFERENCE_CARD_LINES = [
@@ -42,4 +53,5 @@ export const REFERENCE_CARD_LINES = [
   'Gen3 ≈ 1 GB/s · Gen4 ≈ 2 GB/s · Gen5 ≈ 4 GB/s',
   'Gen1 ≈ 0.25 · Gen2 ≈ 0.5 (context)',
   'Aggregate ≈ per-lane × lane count (×1 / ×4 / ×8 / ×16)',
+  UNIT_KEY,
 ];

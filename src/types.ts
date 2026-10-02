@@ -9,6 +9,9 @@ export type Screen =
   | 'throughput-calc'
   | 'bifurcation'
   | 'tradeoff-boss'
+  | 'root-vs-switch'
+  | 'dma-path'
+  | 'p2p-route'
   | 'result';
 
 export type MicrogameId =
@@ -19,9 +22,12 @@ export type MicrogameId =
   | 'generations'
   | 'throughput-calc'
   | 'bifurcation'
-  | 'tradeoff-boss';
+  | 'tradeoff-boss'
+  | 'root-vs-switch'
+  | 'dma-path'
+  | 'p2p-route';
 
-export type ChapterId = 'fundamentals' | 'bandwidth' | 'topology' | 'tradeoffs';
+export type ChapterId = 'fundamentals' | 'bandwidth' | 'topology' | 'tradeoffs' | 'fabric';
 
 export type GameOutcome = 'win' | 'lose' | null;
 
