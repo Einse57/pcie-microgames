@@ -4,9 +4,10 @@ import { randomFail } from '../data/failStrings';
 import {
   aggregateGBps,
   formatGBps,
+  GEN_GTPS,
   GEN_LABEL,
   LANE_WIDTHS,
-  PER_LANE_GBPS,
+  UNIT_KEY,
 } from '../data/pcieBandwidth';
 
 interface Combo {
@@ -138,7 +139,6 @@ export function TradeoffBoss({ sessionTime, onComplete, onAbort }: Props) {
   const targetPct = Math.min(100, (scenario.targetGBps / maxMeter) * 100);
   const meets = fill >= scenario.targetGBps - 0.01;
   const allowed = gen != null && lanes != null && scenario.allow({ gen, lanes });
-  // soft hint: gen is locked if no width in picker would allow it
   const genBlocked = (g: number) => !widths.some((w) => scenario.allow({ gen: g, lanes: w }));
   const laneBlocked = (w: number) =>
     gen != null ? !scenario.allow({ gen, lanes: w }) : w > scenario.maxLanes;
@@ -152,8 +152,11 @@ export function TradeoffBoss({ sessionTime, onComplete, onAbort }: Props) {
     >
       {({ win, mistake, locked }) => (
         <div className="mg tradeoff-boss">
+          <p className="unit-key" title="Units">
+            {UNIT_KEY}
+          </p>
           <p className="prompt">
-            Build a link ≥ <strong>{formatGBps(scenario.targetGBps)}</strong> — leanest valid.
+            Build a link ≥ <strong>{formatGBps(scenario.targetGBps)}</strong> payload — leanest valid.
           </p>
 
           <div className="constraint-chips" aria-label="Constraints">
@@ -174,13 +177,13 @@ export function TradeoffBoss({ sessionTime, onComplete, onAbort }: Props) {
             </div>
             <div className="pipe-labels">
               <span>{fill > 0 ? formatGBps(fill) : '— assemble Gen × width'}</span>
-              <span className="pipe-target-label">🎯 ≥ {formatGBps(scenario.targetGBps)}</span>
+              <span className="pipe-target-label">🎯 ≥ {formatGBps(scenario.targetGBps)} payload</span>
             </div>
           </div>
 
           <div className="pipe-pickers">
             <div className="picker-col" role="group" aria-label="Generation">
-              <span className="picker-label">Gen</span>
+              <span className="picker-label">Gen (link rate)</span>
               <div className="picker-row gen-rungs">
                 {gens.map((g) => {
                   const blocked = genBlocked(g);
@@ -200,7 +203,7 @@ export function TradeoffBoss({ sessionTime, onComplete, onAbort }: Props) {
                     >
                       {blocked && <span className="lock-badge" aria-hidden>🔒</span>}
                       <strong>{GEN_LABEL[g]}</strong>
-                      <small>{formatGBps(PER_LANE_GBPS[g])}/L</small>
+                      <small>{GEN_GTPS[g]}</small>
                     </button>
                   );
                 })}
