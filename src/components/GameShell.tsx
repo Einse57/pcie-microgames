@@ -1,54 +1,83 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import type { MicrogameId } from '../types';
+import { formatTime } from '../types';
 import { getMeta } from '../data/microgames';
 import { randomFail, randomWin } from '../data/failStrings';
 import { TimerBar } from './TimerBar';
 
+/** Seconds added to elapsed on each mistake */
+export const MISTAKE_PENALTY = 1.5;
+
 interface GameShellProps {
   id: MicrogameId;
-  score: number;
-  onComplete: (won: boolean, failReason?: string) => void;
+  /** Session total time so far (seconds) */
+  sessionTime: number;
+  onComplete: (won: boolean, timeSeconds: number, failReason?: string) => void;
   onAbort: () => void;
   children: (api: {
     win: () => void;
-    lose: (reason?: string) => void;
+    /** Wrong answer: +penalty, keep playing — does not end the round */
+    mistake: (reason?: string) => void;
     locked: boolean;
   }) => ReactNode;
 }
 
-export function GameShell({ id, score, onComplete, onAbort, children }: GameShellProps) {
+export function GameShell({ id, sessionTime, onComplete, onAbort, children }: GameShellProps) {
   const meta = getMeta(id);
-  const [remaining, setRemaining] = useState(meta.seconds);
+  const [elapsed, setElapsed] = useState(0);
   const [locked, setLocked] = useState(false);
-  const [banner, setBanner] = useState<{ kind: 'win' | 'lose'; text: string } | null>(null);
+  const [banner, setBanner] = useState<{ kind: 'win' | 'mistake'; text: string } | null>(null);
   const done = useRef(false);
+  const penaltyRef = useRef(0);
+  const startRef = useRef(performance.now());
+  const bannerClearRef = useRef<number | null>(null);
+
+  const readElapsed = () =>
+    (performance.now() - startRef.current) / 1000 + penaltyRef.current;
 
   const finish = (won: boolean, reason?: string) => {
     if (done.current) return;
     done.current = true;
     setLocked(true);
+    const t = readElapsed();
+    setElapsed(t);
     const text = won ? randomWin(id) : reason ?? randomFail(id);
-    setBanner({ kind: won ? 'win' : 'lose', text });
-    window.setTimeout(() => onComplete(won, won ? undefined : text), 1100);
+    setBanner({ kind: won ? 'win' : 'mistake', text });
+    window.setTimeout(() => onComplete(won, t, won ? undefined : text), 1100);
   };
 
   useEffect(() => {
-    const start = performance.now();
-    const total = meta.seconds * 1000;
+    done.current = false;
+    penaltyRef.current = 0;
+    startRef.current = performance.now();
+    setElapsed(0);
+    setLocked(false);
+    setBanner(null);
+
     let raf = 0;
-    const tick = (now: number) => {
+    const tick = () => {
       if (done.current) return;
-      const left = Math.max(0, total - (now - start));
-      setRemaining(left / 1000);
-      if (left <= 0) {
-        finish(false, randomFail(id));
-        return;
-      }
+      setElapsed(readElapsed());
       raf = requestAnimationFrame(tick);
     };
     raf = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(raf);
+    return () => {
+      cancelAnimationFrame(raf);
+      if (bannerClearRef.current != null) window.clearTimeout(bannerClearRef.current);
+    };
   }, [id]);
+
+  const mistake = (reason?: string) => {
+    if (done.current || locked) return;
+    penaltyRef.current += MISTAKE_PENALTY;
+    setElapsed(readElapsed());
+    const text = reason ?? randomFail(id);
+    setBanner({ kind: 'mistake', text });
+    if (bannerClearRef.current != null) window.clearTimeout(bannerClearRef.current);
+    bannerClearRef.current = window.setTimeout(() => {
+      if (!done.current) setBanner(null);
+    }, 900);
+  };
 
   return (
     <div className="game-shell">
@@ -60,19 +89,28 @@ export function GameShell({ id, score, onComplete, onAbort, children }: GameShel
           <h1>{meta.title}</h1>
           <p>{meta.tagline}</p>
         </div>
-        <div className="score-chip">SCORE {score}</div>
+        <div className="score-chip" title="Session time (lower is better)">
+          TIME {formatTime(sessionTime)}
+        </div>
       </header>
-      <TimerBar seconds={meta.seconds} remaining={remaining} />
+      <TimerBar elapsed={elapsed} par={meta.seconds} />
       <div className="game-stage">
         {children({
           win: () => finish(true),
-          lose: (reason) => finish(false, reason),
+          mistake,
           locked,
         })}
       </div>
       {banner && (
-        <div className={`result-banner ${banner.kind}`} role="status">
-          <strong>{banner.kind === 'win' ? 'CLEAR!' : 'FAIL!'}</strong>
+        <div
+          className={`result-banner ${banner.kind === 'win' ? 'win' : 'lose'}`}
+          role="status"
+        >
+          <strong>
+            {banner.kind === 'win'
+              ? `CLEAR · ${formatTime(elapsed)}`
+              : `+${MISTAKE_PENALTY.toFixed(1)}s`}
+          </strong>
           <span>{banner.text}</span>
         </div>
       )}

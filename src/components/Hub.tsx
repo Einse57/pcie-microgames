@@ -1,30 +1,32 @@
 import { MICROGAMES } from '../data/microgames';
 import type { MicrogameId } from '../types';
+import { formatTime } from '../types';
 
 interface HubProps {
-  score: number;
-  best: number;
+  sessionTime: number;
+  bestTime: number | null;
   onPlay: (id: MicrogameId) => void;
   onCampaign: () => void;
 }
 
-export function Hub({ score, best, onPlay, onCampaign }: HubProps) {
+export function Hub({ sessionTime, bestTime, onPlay, onCampaign }: HubProps) {
   return (
     <div className="hub">
       <header className="hub-hero">
-        <p className="eyebrow">WarioWare × PCIe</p>
+        <p className="eyebrow">Interactive PCIe drills</p>
         <h1>PCIe Microgames</h1>
         <p className="lede">
-          Five-second drills for platform SAs and new OS/driver engineers.
-          Train links. Sort packets. Claim BARs. Don&apos;t brick the bus.
+          Short, focused exercises for platform SAs and new OS/driver engineers.
+          Train links, sort packets, and claim BARs — build bus intuition under
+          a stopwatch. Lower total time is better.
         </p>
         <div className="hub-actions">
           <button type="button" className="primary-btn" onClick={onCampaign}>
             ▶ Play Campaign (3 games)
           </button>
           <div className="score-row">
-            <span>Session {score}</span>
-            <span>Best {best}</span>
+            <span>Session time {formatTime(sessionTime)}</span>
+            <span>Best time {bestTime == null ? '—' : formatTime(bestTime)}</span>
           </div>
         </div>
       </header>
@@ -56,12 +58,12 @@ export function Hub({ score, best, onPlay, onCampaign }: HubProps) {
             </button>
           ))}
         </div>
-        <p className="mb-hint">Tap a glowing socket — or run the full campaign.</p>
+        <p className="mb-hint">Select a socket to practice one drill, or run the full campaign.</p>
       </section>
 
       <footer className="hub-foot">
         <span>Phase A vertical slice · Vite + React + TS · Vercel-ready</span>
-        <span>No CXL. No multiplayer. Just vibes + fundamentals.</span>
+        <span>Links, packets, and BARs — no CXL, no accounts.</span>
       </footer>
     </div>
   );
