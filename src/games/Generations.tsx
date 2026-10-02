@@ -1,14 +1,20 @@
 import { useMemo, useState } from 'react';
 import { GameShell } from '../components/GameShell';
 import { randomFail } from '../data/failStrings';
-import { formatGBps, GEN_GTPS, GEN_LABEL, PER_LANE_GBPS } from '../data/pcieBandwidth';
+import {
+  formatGBps,
+  formatGBpsShort,
+  GEN_GTPS,
+  GEN_LABEL,
+  PER_LANE_GBPS,
+  UNIT_KEY,
+} from '../data/pcieBandwidth';
 
 type RoundKind = 'bw' | 'gtps';
 
 interface Round {
   kind: RoundKind;
   answer: number;
-  /** Display value on the target meter */
   targetLabel: string;
 }
 
@@ -21,13 +27,12 @@ function buildRounds(): Round[] {
   const g1 = pick(focus);
   const g2 = pick(all);
   const g3 = pick(focus);
-  const rounds: Round[] = shuffle([
+  return shuffle([
     { kind: 'bw', answer: g1, targetLabel: formatGBps(PER_LANE_GBPS[g1]) },
     { kind: 'gtps', answer: g2, targetLabel: GEN_GTPS[g2] },
     { kind: 'bw', answer: g3, targetLabel: formatGBps(PER_LANE_GBPS[g3]) },
     { kind: 'bw', answer: 3, targetLabel: formatGBps(1) },
   ]);
-  return rounds;
 }
 
 interface Props {
@@ -46,10 +51,15 @@ export function Generations({ sessionTime, onComplete, onAbort }: Props) {
     <GameShell id="generations" sessionTime={sessionTime} onComplete={onComplete} onAbort={onAbort}>
       {({ win, mistake, locked }) => (
         <div className="mg generations">
+          <p className="unit-key" title="Units">
+            {UNIT_KEY}
+          </p>
           <p className="prompt">
             Tap the Gen rung for{' '}
             <strong>
-              {current.kind === 'bw' ? `${current.targetLabel}/lane` : current.targetLabel}
+              {current.kind === 'bw'
+                ? `${current.targetLabel} / lane (payload)`
+                : current.targetLabel}
             </strong>
             . ({index + 1}/{rounds.length})
           </p>
@@ -58,7 +68,9 @@ export function Generations({ sessionTime, onComplete, onAbort }: Props) {
             <span className="meter-chip">TARGET</span>
             <div className="meter-glow">
               <strong>{current.targetLabel}</strong>
-              <small>{current.kind === 'bw' ? 'per lane' : 'link rate'}</small>
+              <small>
+                {current.kind === 'bw' ? '≈ payload / lane' : 'link rate (GT/s)'}
+              </small>
             </div>
           </div>
 
@@ -87,7 +99,7 @@ export function Generations({ sessionTime, onComplete, onAbort }: Props) {
                   </span>
                   <strong>{GEN_LABEL[g]}</strong>
                   <small>{GEN_GTPS[g]}</small>
-                  <span className="rung-bw">{formatGBps(h)}</span>
+                  <span className="rung-bw">≈ {formatGBpsShort(h)}/L</span>
                 </button>
               );
             })}
