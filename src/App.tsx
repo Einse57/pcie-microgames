@@ -7,43 +7,52 @@ import { PacketSort } from './games/PacketSort';
 import { BarClaim } from './games/BarClaim';
 import type { MicrogameId, RoundResult, Screen } from './types';
 
-const BEST_KEY = 'pcie-microgames-best';
+const BEST_KEY = 'pcie-microgames-best-time';
 
 export default function App() {
   const [screen, setScreen] = useState<Screen>('hub');
-  const [score, setScore] = useState(0);
-  const [best, setBest] = useState(0);
+  const [sessionTime, setSessionTime] = useState(0);
+  const [bestTime, setBestTime] = useState<number | null>(null);
   const [solo, setSolo] = useState<MicrogameId | null>(null);
   const [results, setResults] = useState<RoundResult[]>([]);
+  const [lastCampaignTotal, setLastCampaignTotal] = useState<number | null>(null);
 
   useEffect(() => {
-    const stored = Number(localStorage.getItem(BEST_KEY) || '0');
-    if (!Number.isNaN(stored)) setBest(stored);
+    const raw = localStorage.getItem(BEST_KEY);
+    if (raw == null || raw === '') return;
+    const stored = Number(raw);
+    if (Number.isFinite(stored) && stored > 0) setBestTime(stored);
   }, []);
 
-  useEffect(() => {
-    if (score > best) {
-      setBest(score);
-      localStorage.setItem(BEST_KEY, String(score));
-    }
-  }, [score, best]);
+  const addTime = (timeSeconds: number) =>
+    setSessionTime((s) => s + timeSeconds);
 
-  const bump = (delta: number) => setScore((s) => s + delta);
+  const considerBest = (campaignTotal: number) => {
+    setBestTime((prev) => {
+      if (prev == null || campaignTotal < prev) {
+        localStorage.setItem(BEST_KEY, String(campaignTotal));
+        return campaignTotal;
+      }
+      return prev;
+    });
+  };
 
-  const finishSolo = (won: boolean, failReason?: string) => {
+  const finishSolo = (won: boolean, timeSeconds: number, failReason?: string) => {
     if (!solo) return;
-    bump(won ? 100 : 10);
-    setResults([{ id: solo, won, failReason }]);
+    addTime(timeSeconds);
+    setResults([{ id: solo, won, timeSeconds, failReason }]);
+    setLastCampaignTotal(null);
     setScreen('result');
   };
 
   if (screen === 'hub') {
     return (
       <Hub
-        score={score}
-        best={best}
+        sessionTime={sessionTime}
+        bestTime={bestTime}
         onCampaign={() => {
           setResults([]);
+          setLastCampaignTotal(null);
           setScreen('campaign');
         }}
         onPlay={(id) => {
@@ -57,10 +66,13 @@ export default function App() {
   if (screen === 'campaign') {
     return (
       <Campaign
-        score={score}
-        onScore={bump}
+        sessionTime={sessionTime}
+        onScore={addTime}
         onAbort={() => setScreen('hub')}
         onDone={(r) => {
+          const total = r.reduce((sum, x) => sum + x.timeSeconds, 0);
+          setLastCampaignTotal(total);
+          considerBest(total);
           setResults(r);
           setScreen('result');
         }}
@@ -72,10 +84,13 @@ export default function App() {
     return (
       <ResultScreen
         results={results}
-        score={score}
+        sessionTime={sessionTime}
+        campaignTotal={lastCampaignTotal}
+        bestTime={bestTime}
         onHub={() => setScreen('hub')}
         onReplay={() => {
           setResults([]);
+          setLastCampaignTotal(null);
           setScreen('campaign');
         }}
       />
@@ -83,7 +98,7 @@ export default function App() {
   }
 
   const common = {
-    score,
+    sessionTime,
     onAbort: () => setScreen('hub'),
     onComplete: finishSolo,
   };
