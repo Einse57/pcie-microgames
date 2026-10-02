@@ -14,6 +14,7 @@ Short, focused **microgames** that teach PCIe fundamentals — for platform Solu
 | **4 · Tradeoffs** | Tradeoff Boss | Meet a BW target under Gen/slot/power constraints with least overkill |
 | **5 · Fabric / Ops** | Root or Switch?, DMA Path, P2P or Bounce? | Topology roles, DMA via RC, P2P vs host bounce |
 | **6 · Drivers / Platform** | Config Walk, MSI Setup, AER Triage | Type0/1 enum, MSI/MSI-X vectors, AER severity |
+| **7 · Attach / CXL · DMI · NVMe** | DMI Link, NVMe Map, CXL Type | CPU↔PCH DMI vs PEG, NVMe PCIe EP + queues, CXL Types 1/2/3 & .io/.cache/.mem |
 
 Hub shows **progressive unlock**: clear every drill in a chapter to open the next. Campaign plays all drills in order. Each game starts with a one-line teach tip.
 
@@ -82,7 +83,6 @@ src/
 
 ## Non-goals
 
-- CXL
 - Multiplayer / accounts / leaderboards
 - Backend or analytics
 - Full Spec fidelity (intuition > encyclopedia)

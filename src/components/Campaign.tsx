@@ -15,6 +15,9 @@ import { P2PRoute } from '../games/P2PRoute';
 import { ConfigEnum } from '../games/ConfigEnum';
 import { MsiSetup } from '../games/MsiSetup';
 import { AerTriage } from '../games/AerTriage';
+import { DmiLink } from '../games/DmiLink';
+import { NvmeMap } from '../games/NvmeMap';
+import { CxlType } from '../games/CxlType';
 
 interface CampaignProps {
   sessionTime: number;
@@ -61,6 +64,12 @@ function renderGame(
       return <MsiSetup {...common} />;
     case 'aer-triage':
       return <AerTriage {...common} />;
+    case 'dmi-link':
+      return <DmiLink {...common} />;
+    case 'nvme-map':
+      return <NvmeMap {...common} />;
+    case 'cxl-type':
+      return <CxlType {...common} />;
   }
 }
 
