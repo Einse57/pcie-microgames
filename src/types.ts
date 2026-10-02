@@ -12,6 +12,9 @@ export type Screen =
   | 'root-vs-switch'
   | 'dma-path'
   | 'p2p-route'
+  | 'config-enum'
+  | 'msi-setup'
+  | 'aer-triage'
   | 'result';
 
 export type MicrogameId =
@@ -25,9 +28,18 @@ export type MicrogameId =
   | 'tradeoff-boss'
   | 'root-vs-switch'
   | 'dma-path'
-  | 'p2p-route';
+  | 'p2p-route'
+  | 'config-enum'
+  | 'msi-setup'
+  | 'aer-triage';
 
-export type ChapterId = 'fundamentals' | 'bandwidth' | 'topology' | 'tradeoffs' | 'fabric';
+export type ChapterId =
+  | 'fundamentals'
+  | 'bandwidth'
+  | 'topology'
+  | 'tradeoffs'
+  | 'fabric'
+  | 'drivers';
 
 export type GameOutcome = 'win' | 'lose' | null;
 
