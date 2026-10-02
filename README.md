@@ -12,8 +12,10 @@ Short, focused **microgames** that teach PCIe fundamentals — for platform Solu
 | **2 · Bandwidth** | Lane Widths, Generations, Throughput Calc | ×1/×4/×8/×16, Gen3/4/5 per-lane BW, Gen × lanes aggregate |
 | **3 · Topology** | Bifurcation | Split an ×16 root without oversubscribing lanes |
 | **4 · Tradeoffs** | Tradeoff Boss | Meet a BW target under Gen/slot/power constraints with least overkill |
+| **5 · Fabric / Ops** | Root or Switch?, DMA Path, P2P or Bounce? | Topology roles, DMA via RC, P2P vs host bounce |
+| **6 · Drivers / Platform** | Config Walk, MSI Setup, AER Triage | Type0/1 enum, MSI/MSI-X vectors, AER severity |
 
-Hub shows **progressive unlock**: clear every drill in a chapter to open the next. Campaign plays all eight in order. Each game starts with a one-line teach tip.
+Hub shows **progressive unlock**: clear every drill in a chapter to open the next. Campaign plays all drills in order. Each game starts with a one-line teach tip.
 
 Throughput uses commonly taught approximate unidirectional numbers (Gen3 ≈ 1, Gen4 ≈ 2, Gen5 ≈ 4 GB/s per lane; aggregate ≈ per-lane × lanes). The Throughput Calc drill includes a peekable reference card.
 
@@ -64,7 +66,7 @@ vercel --prod
 src/
   App.tsx              # hub / campaign / solo routing
   components/          # Hub (chapters), GameShell, Campaign, Timer, Result
-  games/               # 8 playable microgames
+  games/               # playable microgames
   data/                # catalog, chapters, progress, BW reference, feedback
 ```
 
