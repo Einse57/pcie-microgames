@@ -17,13 +17,7 @@ export function Hub({ sessionTime, bestTime, cleared, onPlay, onCampaign }: HubP
   return (
     <div className="hub">
       <header className="hub-hero">
-        <p className="eyebrow">Interactive PCIe drills</p>
         <h1>PCIe Microgames</h1>
-        <p className="lede">
-          Progressive exercises for platform SAs and new OS/driver engineers. Learn links,
-          packets, and BARs, then lane widths, generations, throughput, bifurcation, and Gen vs
-          lane tradeoffs — under a stopwatch. Lower total time is better; mistakes add +1.5s.
-        </p>
         <div className="hub-actions">
           <button type="button" className="primary-btn" onClick={onCampaign}>
             ▶ Play full campaign ({MICROGAMES.length} games)
