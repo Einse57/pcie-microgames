@@ -9,6 +9,9 @@ import { Generations } from '../games/Generations';
 import { ThroughputCalc } from '../games/ThroughputCalc';
 import { Bifurcation } from '../games/Bifurcation';
 import { TradeoffBoss } from '../games/TradeoffBoss';
+import { RootVsSwitch } from '../games/RootVsSwitch';
+import { DmaPath } from '../games/DmaPath';
+import { P2PRoute } from '../games/P2PRoute';
 
 interface CampaignProps {
   sessionTime: number;
@@ -43,6 +46,12 @@ function renderGame(
       return <Bifurcation {...common} />;
     case 'tradeoff-boss':
       return <TradeoffBoss {...common} />;
+    case 'root-vs-switch':
+      return <RootVsSwitch {...common} />;
+    case 'dma-path':
+      return <DmaPath {...common} />;
+    case 'p2p-route':
+      return <P2PRoute {...common} />;
   }
 }
 
