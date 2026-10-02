@@ -90,7 +90,7 @@ export function Hub({ sessionTime, bestTime, cleared, onPlay, onCampaign }: HubP
 
       <footer className="hub-foot">
         <span>Vite + React + TS · time-based scoring · Vercel</span>
-        <span>Fundamentals → Bandwidth → Bifurcation → Tradeoffs → Fabric</span>
+        <span>Fundamentals → Bandwidth → Bifurcation → Tradeoffs → Fabric → Drivers</span>
       </footer>
     </div>
   );
