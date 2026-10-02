@@ -41,7 +41,7 @@ const FAILS: Record<MicrogameId, string[]> = {
     'Gen4 ×8 ≈ 16 GB/s (2 × 8), not Gen3 math.',
     'Off by a generation — BW roughly doubles each step Gen3→5.',
     'Lane count wrong: ×16 is 4× an ×4 at the same Gen.',
-    'Peek the reference card, then recompute.',
+    'Watch the meter — Gen × lanes must hit the target exactly.',
   ],
   bifurcation: [
     'Oversubscribed: child widths sum past the ×16 parent.',
