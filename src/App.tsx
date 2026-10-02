@@ -10,6 +10,9 @@ import { Generations } from './games/Generations';
 import { ThroughputCalc } from './games/ThroughputCalc';
 import { Bifurcation } from './games/Bifurcation';
 import { TradeoffBoss } from './games/TradeoffBoss';
+import { RootVsSwitch } from './games/RootVsSwitch';
+import { DmaPath } from './games/DmaPath';
+import { P2PRoute } from './games/P2PRoute';
 import { loadCleared, markCleared } from './data/progress';
 import type { MicrogameId, RoundResult, Screen } from './types';
 
@@ -125,5 +128,8 @@ export default function App() {
   if (screen === 'generations') return <Generations {...common} />;
   if (screen === 'throughput-calc') return <ThroughputCalc {...common} />;
   if (screen === 'bifurcation') return <Bifurcation {...common} />;
-  return <TradeoffBoss {...common} />;
+  if (screen === 'tradeoff-boss') return <TradeoffBoss {...common} />;
+  if (screen === 'root-vs-switch') return <RootVsSwitch {...common} />;
+  if (screen === 'dma-path') return <DmaPath {...common} />;
+  return <P2PRoute {...common} />;
 }
