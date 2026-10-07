@@ -16,6 +16,8 @@ Short, focused **microgames** that teach PCIe fundamentals — for platform Solu
 | **6 · Drivers / Platform** | Config Walk, MSI Setup, AER Triage | Type0/1 enum, MSI/MSI-X vectors, AER severity |
 | **7 · Attach / CXL · DMI · NVMe** | DMI Link, NVMe Map, CXL Type | CPU↔PCH DMI vs PEG, NVMe PCIe EP + queues, CXL Types 1/2/3 & .io/.cache/.mem |
 
+**Chapter flow:** Fundamentals → Bandwidth → Bifurcation → Tradeoffs → Fabric → Drivers → Attach (CXL / DMI / NVMe).
+
 Hub shows **progressive unlock**: clear every drill in a chapter to open the next. Campaign plays all drills in order. Each game starts with a one-line teach tip.
 
 Throughput uses commonly taught approximate unidirectional numbers (Gen3 ≈ 1, Gen4 ≈ 2, Gen5 ≈ 4 GB/s per lane; aggregate ≈ per-lane × lanes). The Throughput Calc drill includes a peekable reference card.
@@ -36,7 +38,7 @@ npm run build    # production bundle → dist/
 npm run preview  # serve dist locally
 ```
 
-**Stack:** Vite + React + TypeScript. Client-only static app — no env secrets, no backend.
+**Stack:** Vite + React + TypeScript · time-based scoring · deployed on Vercel. Client-only static app — no env secrets required for play (optional `FEEDBACK_WEBHOOK_URL` for the hub poll).
 
 ---
 

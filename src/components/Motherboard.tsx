@@ -70,7 +70,6 @@ export function Motherboard({ cleared, onPlay, onFocusChapter }: MotherboardProp
           </div>
         </div>
       </div>
-      <p className="mb-caption">Platform map \u2014 chapter markers jump to the first open drill. Use the cards above to browse every game.</p>
     </section>
   );
 }

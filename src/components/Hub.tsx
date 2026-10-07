@@ -90,8 +90,6 @@ export function Hub({ sessionTime, bestTime, cleared, onPlay, onCampaign }: HubP
       <Motherboard cleared={cleared} onPlay={onPlay} onFocusChapter={focusChapter} />
 
       <footer className="hub-foot">
-        <span>Vite + React + TS · time-based scoring · Vercel</span>
-        <span>Fundamentals → Bandwidth → Bifurcation → Tradeoffs → Fabric → Drivers</span>
         <span>
           <a
             className="hub-credit"
