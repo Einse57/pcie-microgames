@@ -4,7 +4,6 @@ const TOPICS = [
   { id: 'sriov-virt', label: 'SR-IOV / virtualization' },
   { id: 'cxl-pooling', label: 'CXL memory pooling' },
   { id: 'retimers-si', label: 'Retimers / signal integrity' },
-  { id: 'hotplug-pm', label: 'Hot-plug / power' },
   { id: 'acs-iommu', label: 'ACS / IOMMU / ATS' },
   { id: 'other', label: 'Other' },
 ] as const;
