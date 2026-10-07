@@ -92,3 +92,24 @@ src/
 ## License
 
 Private — Andrew Lamkin / Einse57. All rights reserved for now.
+
+---
+
+## Feedback poll (what to cover next)
+
+Hub footer includes a low-key topic poll. Votes `POST` to `/api/feedback`.
+
+**Tracking**
+
+1. Every vote is logged in the Vercel function logs (`[feedback] …`).
+2. If `FEEDBACK_WEBHOOK_URL` is set, the same JSON is forwarded (Google Sheet via Apps Script, Zapier, Make, Formspree, etc.).
+
+**Env var (Vercel → Project → Settings → Environment Variables)**
+
+| Name | Required | Notes |
+|------|----------|-------|
+| `FEEDBACK_WEBHOOK_URL` | No (recommended) | HTTPS endpoint that accepts `POST` JSON `{ topic, note, at, ua }`. |
+
+Sample Apps Script for a Google Sheet: `scripts/feedback-sheet.gs`. After deploying the web app, paste its URL as `FEEDBACK_WEBHOOK_URL` for Production (and Preview if you want), then redeploy.
+
+Without the env var the poll still works; check **Deployments → Function logs** for votes until the sheet webhook is wired.

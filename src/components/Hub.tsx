@@ -3,6 +3,7 @@ import { chapterUnlocked, gameUnlocked } from '../data/progress';
 import type { ChapterId, MicrogameId } from '../types';
 import { formatTime } from '../types';
 import { Motherboard } from './Motherboard';
+import { NextTopicPoll } from './NextTopicPoll';
 
 interface HubProps {
   sessionTime: number;
@@ -91,6 +92,17 @@ export function Hub({ sessionTime, bestTime, cleared, onPlay, onCampaign }: HubP
       <footer className="hub-foot">
         <span>Vite + React + TS · time-based scoring · Vercel</span>
         <span>Fundamentals → Bandwidth → Bifurcation → Tradeoffs → Fabric → Drivers</span>
+        <span>
+          <a
+            className="hub-credit"
+            href="https://www.linkedin.com/in/andrew-lamkin-b63715b"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Andrew Lamkin
+          </a>
+        </span>
+        <NextTopicPoll />
       </footer>
     </div>
   );
