@@ -18,6 +18,7 @@ export const CHAPTER_ANCHORS: ChapterAnchor[] = [
   { chapter: 'fabric', label: 'Fabric', x: 18, y: 58, hint: 'switch' },
   { chapter: 'drivers', label: 'Drivers', x: 78, y: 42, hint: 'IRQ / AER' },
   { chapter: 'attach', label: 'Attach', x: 48, y: 18, hint: 'CXL / DMI / NVMe' },
+  { chapter: 'virtualization', label: 'Virtualization', x: 66, y: 64, hint: 'SR-IOV NIC' },
 ];
 
 interface MotherboardProps {

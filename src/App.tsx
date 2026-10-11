@@ -19,6 +19,7 @@ import { AerTriage } from './games/AerTriage';
 import { DmiLink } from './games/DmiLink';
 import { NvmeMap } from './games/NvmeMap';
 import { CxlType } from './games/CxlType';
+import { VfCarve } from './games/VfCarve';
 import { loadCleared, markCleared } from './data/progress';
 import type { MicrogameId, RoundResult, Screen } from './types';
 
@@ -144,5 +145,6 @@ export default function App() {
   if (screen === 'dmi-link') return <DmiLink {...common} />;
   if (screen === 'nvme-map') return <NvmeMap {...common} />;
   if (screen === 'cxl-type') return <CxlType {...common} />;
+  if (screen === 'sriov-vf') return <VfCarve {...common} />;
   return <AerTriage {...common} />;
 }

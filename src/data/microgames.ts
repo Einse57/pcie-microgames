@@ -43,6 +43,12 @@ export const CHAPTERS: ChapterMeta[] = [
     blurb: 'Chipset DMI, NVMe as a PCIe endpoint, and CXL Types over a PCIe PHY.',
     order: 6,
   },
+  {
+    id: 'virtualization',
+    title: '8 · Virtualization / SR-IOV',
+    blurb: 'Split one physical NIC into virtual functions and hand them straight to VMs.',
+    order: 7,
+  },
 ];
 
 export const MICROGAMES: MicrogameMeta[] = [
@@ -216,9 +222,19 @@ export const MICROGAMES: MicrogameMeta[] = [
     chapter: 'attach',
     hubSlot: { label: 'CXL', x: 88, y: 54 },
   },
+  {
+    id: 'sriov-vf',
+    title: 'VF Carve',
+    tagline: 'Dial NumVFs, then wire PF to the host and one VF to each VM.',
+    concept: 'SR-IOV PF vs VF',
+    tip: 'SR-IOV: one physical function (PF) spawns lightweight virtual functions (VFs). The host keeps the PF; each VM gets a VF directly — all share one physical port.',
+    seconds: 14,
+    chapter: 'virtualization',
+    hubSlot: { label: 'SR-IOV', x: 66, y: 64 },
+  },
 ];
 
-/** Full campaign order: Fundamentals \u2192 Bandwidth \u2192 Topology \u2192 Tradeoffs \u2192 Fabric \u2192 Drivers \u2192 Attach */
+/** Full campaign order: Fundamentals \u2192 Bandwidth \u2192 Topology \u2192 Tradeoffs \u2192 Fabric \u2192 Drivers \u2192 Attach \u2192 Virtualization */
 export const CAMPAIGN_ORDER: MicrogameId[] = [
   'link-training',
   'packet-sort',
@@ -237,6 +253,7 @@ export const CAMPAIGN_ORDER: MicrogameId[] = [
   'dmi-link',
   'nvme-map',
   'cxl-type',
+  'sriov-vf',
 ];
 
 export function getMeta(id: MicrogameId): MicrogameMeta {
