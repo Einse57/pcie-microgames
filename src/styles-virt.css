@@ -1,0 +1,28 @@
+/* -- Virtualization / SR-IOV -- */
+.sriov-card{display:flex;flex-direction:column;gap:0.6rem;margin-bottom:0.75rem;padding:0.85rem;border-radius:14px;border:1px solid rgba(94,234,212,0.35);background:linear-gradient(180deg,rgba(15,61,46,0.45),rgba(7,15,26,0.55));}
+.sriov-card-head{display:flex;justify-content:space-between;align-items:baseline;gap:0.5rem;}
+.sriov-card-head small{color:var(--muted);font-size:0.75rem;}
+.sriov-fns{display:grid;grid-template-columns:repeat(auto-fill,minmax(74px,1fr));gap:0.45rem;}
+.sriov-fn{display:flex;flex-direction:column;align-items:center;gap:0.1rem;padding:0.5rem 0.35rem;border-radius:10px;border:1px solid rgba(155,176,201,0.35);background:rgba(15,23,42,0.85);color:var(--text);min-height:58px;justify-content:center;}
+.sriov-fn small{color:var(--muted);font-size:0.65rem;font-variant-numeric:tabular-nums;}
+.sriov-fn.pf{border-color:rgba(251,191,36,0.6);}
+.sriov-fn.vf{border-color:rgba(56,189,248,0.55);}
+.sriov-fn.ghost{border-style:dashed;opacity:0.35;}
+.sriov-fn.selected{box-shadow:0 0 0 2px var(--teal),0 0 14px rgba(94,234,212,0.4);}
+.sriov-fn.placed{opacity:0.6;border-style:dashed;}
+.sriov-fn .sriov-dest{color:var(--teal);font-weight:700;}
+.sriov-port{display:flex;align-items:center;gap:0.55rem;}
+.sriov-port small{color:var(--muted);font-size:0.72rem;}
+.sriov-port-jack{display:block;width:34px;height:22px;border-radius:4px;border:2px solid rgba(251,191,36,0.6);background:rgba(7,15,26,0.9);}
+.sriov-dial{display:flex;align-items:center;justify-content:center;gap:0.65rem;margin-bottom:0.85rem;flex-wrap:wrap;}
+.sriov-dial .ghost-btn{min-width:44px;font-size:1.2rem;}
+.sriov-dial-read{display:flex;flex-direction:column;align-items:center;min-width:72px;padding:0.35rem 0.6rem;border-radius:10px;border:1px solid rgba(56,189,248,0.45);background:rgba(15,23,42,0.85);}
+.sriov-dial-read strong{font-size:1.4rem;font-variant-numeric:tabular-nums;}
+.sriov-dial-read small{color:var(--muted);font-size:0.7rem;}
+.sriov-targets{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:0.5rem;}
+.sriov-target{display:flex;flex-direction:column;align-items:center;gap:0.15rem;padding:0.75rem 0.5rem;border-radius:12px;border:1px dashed rgba(155,176,201,0.4);background:rgba(7,15,26,0.55);color:var(--text);}
+.sriov-target small{color:var(--muted);font-size:0.72rem;}
+.sriov-target.host{border-color:rgba(251,191,36,0.5);}
+.sriov-target.vm{border-color:rgba(56,189,248,0.45);}
+.sriov-target.filled{border-style:solid;box-shadow:0 0 12px rgba(94,234,212,0.3);}
+.sriov-target.filled small{color:var(--teal);}

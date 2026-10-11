@@ -86,6 +86,11 @@ const FAILS: Record<MicrogameId, string[]> = {
     'CXL.io is PCIe-like I/O; .cache is coherency; .mem is memory access.',
     'Match the silhouette to the CXL Type before binning protocols.',
   ],
+  'sriov-vf': [
+    'One VF per VM — set NumVFs to match the VM count.',
+    'NumVFs must fit the VMs exactly here — no spares, no shortfall.',
+    'VFs are spawned by writing NumVFs in the PF’s SR-IOV capability.',
+  ],
 };
 
 export function randomFail(id: MicrogameId): string {
@@ -111,6 +116,7 @@ export const WIN_STRINGS: Record<MicrogameId, string[]> = {
   'dmi-link': ['DMI vs PEG path locked in.', 'Chipset traffic on DMI — GPU on PEG.', 'CPU↔PCH link distinguished from the GPU slot.'],
   'nvme-map': ['NVMe seated on ×4 as a PCIe endpoint.', 'Protocol and queues look right.', 'M.2/U.2/AIC mapped onto PCIe — not SATA.'],
   'cxl-type': ['CXL Type match looks solid.', 'Protocol lane binned: .io / .cache / .mem.', 'Type 1/2/3 roles sorted over the PCIe PHY.'],
+  'sriov-vf': ['SR-IOV up — PF on the host, a VF in every VM.', 'Functions carved and passed through.', 'Each VM has its own PCIe function on one shared port.'],
 };
 
 export function randomWin(id: MicrogameId): string {

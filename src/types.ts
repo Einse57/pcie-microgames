@@ -18,6 +18,7 @@ export type Screen =
   | 'dmi-link'
   | 'nvme-map'
   | 'cxl-type'
+  | 'sriov-vf'
   | 'result';
 
 export type MicrogameId =
@@ -37,7 +38,8 @@ export type MicrogameId =
   | 'aer-triage'
   | 'dmi-link'
   | 'nvme-map'
-  | 'cxl-type';
+  | 'cxl-type'
+  | 'sriov-vf';
 
 export type ChapterId =
   | 'fundamentals'
@@ -46,7 +48,8 @@ export type ChapterId =
   | 'tradeoffs'
   | 'fabric'
   | 'drivers'
-  | 'attach';
+  | 'attach'
+  | 'virtualization';
 
 export type GameOutcome = 'win' | 'lose' | null;
 

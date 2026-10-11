@@ -18,6 +18,7 @@ import { AerTriage } from '../games/AerTriage';
 import { DmiLink } from '../games/DmiLink';
 import { NvmeMap } from '../games/NvmeMap';
 import { CxlType } from '../games/CxlType';
+import { VfCarve } from '../games/VfCarve';
 
 interface CampaignProps {
   sessionTime: number;
@@ -70,6 +71,8 @@ function renderGame(
       return <NvmeMap {...common} />;
     case 'cxl-type':
       return <CxlType {...common} />;
+    case 'sriov-vf':
+      return <VfCarve {...common} />;
   }
 }
 
