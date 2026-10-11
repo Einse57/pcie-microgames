@@ -8,6 +8,7 @@ import './styles-motherboard.css';
 import './styles-drivers.css';
 import './styles-attach.css';
 import './styles-virt.css';
+import './styles-isolation.css';
 import App from './App';
 
 createRoot(document.getElementById('root')!).render(

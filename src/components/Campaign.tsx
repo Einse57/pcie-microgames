@@ -19,6 +19,8 @@ import { DmiLink } from '../games/DmiLink';
 import { NvmeMap } from '../games/NvmeMap';
 import { CxlType } from '../games/CxlType';
 import { VfCarve } from '../games/VfCarve';
+import { AcsGroups } from '../games/AcsGroups';
+import { IovaMap } from '../games/IovaMap';
 
 interface CampaignProps {
   sessionTime: number;
@@ -73,6 +75,10 @@ function renderGame(
       return <CxlType {...common} />;
     case 'sriov-vf':
       return <VfCarve {...common} />;
+    case 'acs-groups':
+      return <AcsGroups {...common} />;
+    case 'iova-map':
+      return <IovaMap {...common} />;
   }
 }
 
