@@ -101,6 +101,11 @@ const FAILS: Record<MicrogameId, string[]> = {
     'Unmap in the IOMMU and invalidate the device ATC.',
     'A stale ATS translation lets DMA hit a freed page.',
   ],
+  'retimer-reach': [
+    'A sub-channel is over its dB budget — the eye closes.',
+    'Fewest retimers that close the link wins.',
+    'Retimers split the channel; each side gets its own loss budget.',
+  ],
 };
 
 export function randomFail(id: MicrogameId): string {
@@ -129,6 +134,7 @@ export const WIN_STRINGS: Record<MicrogameId, string[]> = {
   'sriov-vf': ['SR-IOV up — PF on the host, a VF in every VM.', 'Functions carved and passed through.', 'Each VM has its own PCIe function on one shared port.'],
   'acs-groups': ['Own IOMMU group — safe to pass through.', 'ACS forces peer traffic up to the IOMMU.', 'Group isolated; VFIO can bind it.'],
   'iova-map': ['IOMMU table and ATC agree — DMA contained.', 'Guest DMA stays inside guest RAM.', 'Unmap + ATS invalidate done in the right order.'],
+  'retimer-reach': ['Link trained — every sub-channel inside budget.', 'Lean retimer plan: reach without overkill.', 'Eye open at Gen speed.'],
 };
 
 export function randomWin(id: MicrogameId): string {

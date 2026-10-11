@@ -21,6 +21,7 @@ import { CxlType } from '../games/CxlType';
 import { VfCarve } from '../games/VfCarve';
 import { AcsGroups } from '../games/AcsGroups';
 import { IovaMap } from '../games/IovaMap';
+import { RetimerReach } from '../games/RetimerReach';
 
 interface CampaignProps {
   sessionTime: number;
@@ -79,6 +80,8 @@ function renderGame(
       return <AcsGroups {...common} />;
     case 'iova-map':
       return <IovaMap {...common} />;
+    case 'retimer-reach':
+      return <RetimerReach {...common} />;
   }
 }
 
