@@ -19,6 +19,8 @@ export type Screen =
   | 'nvme-map'
   | 'cxl-type'
   | 'sriov-vf'
+  | 'acs-groups'
+  | 'iova-map'
   | 'result';
 
 export type MicrogameId =
@@ -39,7 +41,9 @@ export type MicrogameId =
   | 'dmi-link'
   | 'nvme-map'
   | 'cxl-type'
-  | 'sriov-vf';
+  | 'sriov-vf'
+  | 'acs-groups'
+  | 'iova-map';
 
 export type ChapterId =
   | 'fundamentals'
@@ -49,7 +53,8 @@ export type ChapterId =
   | 'fabric'
   | 'drivers'
   | 'attach'
-  | 'virtualization';
+  | 'virtualization'
+  | 'isolation';
 
 export type GameOutcome = 'win' | 'lose' | null;
 

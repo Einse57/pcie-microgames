@@ -91,6 +91,16 @@ const FAILS: Record<MicrogameId, string[]> = {
     'NumVFs must fit the VMs exactly here — no spares, no shortfall.',
     'VFs are spawned by writing NumVFs in the PF’s SR-IOV capability.',
   ],
+  'acs-groups': [
+    'Still sharing an IOMMU group — VFIO hands a VM the whole group.',
+    'Peers behind ports without ACS can DMA each other inside the switch.',
+    'Isolate the device: ACS on its downstream port, or move it to a port that has ACS.',
+  ],
+  'iova-map': [
+    'Map only into the owning VM’s pages.',
+    'Unmap in the IOMMU and invalidate the device ATC.',
+    'A stale ATS translation lets DMA hit a freed page.',
+  ],
 };
 
 export function randomFail(id: MicrogameId): string {
@@ -117,6 +127,8 @@ export const WIN_STRINGS: Record<MicrogameId, string[]> = {
   'nvme-map': ['NVMe seated on ×4 as a PCIe endpoint.', 'Protocol and queues look right.', 'M.2/U.2/AIC mapped onto PCIe — not SATA.'],
   'cxl-type': ['CXL Type match looks solid.', 'Protocol lane binned: .io / .cache / .mem.', 'Type 1/2/3 roles sorted over the PCIe PHY.'],
   'sriov-vf': ['SR-IOV up — PF on the host, a VF in every VM.', 'Functions carved and passed through.', 'Each VM has its own PCIe function on one shared port.'],
+  'acs-groups': ['Own IOMMU group — safe to pass through.', 'ACS forces peer traffic up to the IOMMU.', 'Group isolated; VFIO can bind it.'],
+  'iova-map': ['IOMMU table and ATC agree — DMA contained.', 'Guest DMA stays inside guest RAM.', 'Unmap + ATS invalidate done in the right order.'],
 };
 
 export function randomWin(id: MicrogameId): string {

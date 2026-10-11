@@ -3,7 +3,6 @@ import { useState, type FormEvent } from 'react';
 const TOPICS = [
   { id: 'cxl-pooling', label: 'CXL memory pooling' },
   { id: 'retimers-si', label: 'Retimers / signal integrity' },
-  { id: 'acs-iommu', label: 'ACS / IOMMU / ATS' },
   { id: 'other', label: 'Other' },
 ] as const;
 

@@ -49,6 +49,12 @@ export const CHAPTERS: ChapterMeta[] = [
     blurb: 'Split one physical NIC into virtual functions and hand them straight to VMs.',
     order: 7,
   },
+  {
+    id: 'isolation',
+    title: '9 · Isolation / ACS · IOMMU · ATS',
+    blurb: 'Give a device its own IOMMU group, keep its DMA inside its VM, and flush stale ATS translations.',
+    order: 8,
+  },
 ];
 
 export const MICROGAMES: MicrogameMeta[] = [
@@ -232,9 +238,29 @@ export const MICROGAMES: MicrogameMeta[] = [
     chapter: 'virtualization',
     hubSlot: { label: 'SR-IOV', x: 66, y: 64 },
   },
+  {
+    id: 'acs-groups',
+    title: 'ACS Groups',
+    tagline: 'Toggle ACS or reseat cards until the passthrough device stands alone in its IOMMU group.',
+    concept: 'ACS & IOMMU groups',
+    tip: 'Without ACS, devices behind one switch can DMA each other directly, bypassing the IOMMU — so they share one IOMMU group. ACS on the downstream port forces peer traffic up to the root.',
+    seconds: 14,
+    chapter: 'isolation',
+    hubSlot: { label: 'ACS', x: 34, y: 62 },
+  },
+  {
+    id: 'iova-map',
+    title: 'IOVA Map',
+    tagline: 'Map a guest device’s IOVAs into its own RAM, then unmap and flush the ATS cache.',
+    concept: 'IOMMU mapping & ATS invalidation',
+    tip: 'Devices DMA to IOVAs; the IOMMU translates them to physical pages the VM owns. With ATS the device caches translations (ATC), so an unmap needs an ATS invalidate too.',
+    seconds: 16,
+    chapter: 'isolation',
+    hubSlot: { label: 'IOMMU', x: 46, y: 30 },
+  },
 ];
 
-/** Full campaign order: Fundamentals \u2192 Bandwidth \u2192 Topology \u2192 Tradeoffs \u2192 Fabric \u2192 Drivers \u2192 Attach \u2192 Virtualization */
+/** Full campaign order: Fundamentals \u2192 Bandwidth \u2192 Topology \u2192 Tradeoffs \u2192 Fabric \u2192 Drivers \u2192 Attach \u2192 Virtualization \u2192 Isolation */
 export const CAMPAIGN_ORDER: MicrogameId[] = [
   'link-training',
   'packet-sort',
@@ -254,6 +280,8 @@ export const CAMPAIGN_ORDER: MicrogameId[] = [
   'nvme-map',
   'cxl-type',
   'sriov-vf',
+  'acs-groups',
+  'iova-map',
 ];
 
 export function getMeta(id: MicrogameId): MicrogameMeta {
