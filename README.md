@@ -17,12 +17,15 @@ Short, focused **microgames** that teach PCIe fundamentals — for platform Solu
 | **7 · Attach / CXL · DMI · NVMe** | DMI Link, NVMe Map, CXL Type | CPU↔PCH DMI vs PEG, NVMe PCIe EP + queues, CXL Types 1/2/3 & .io/.cache/.mem |
 | **8 · Virtualization / SR-IOV** | VF Carve | PF vs VF, NumVFs ≤ TotalVFs, VF passthrough to VMs over one shared port |
 | **9 · Isolation / ACS · IOMMU · ATS** | ACS Groups, IOVA Map | ACS & IOMMU groups for passthrough, IOVA→PA mapping, ATS invalidation on unmap |
+| **10 · Signal Integrity / Retimers** | Retimer Reach | Gen4/Gen5 channel loss budget (dB at Nyquist), fewest retimers (max 2) to close the link |
 
-**Chapter flow:** Fundamentals → Bandwidth → Bifurcation → Tradeoffs → Fabric → Drivers → Attach (CXL / DMI / NVMe) → Virtualization (SR-IOV) → Isolation (ACS / IOMMU / ATS).
+**Chapter flow:** Fundamentals → Bandwidth → Bifurcation → Tradeoffs → Fabric → Drivers → Attach (CXL / DMI / NVMe) → Virtualization (SR-IOV) → Isolation (ACS / IOMMU / ATS) → Signal integrity (Retimers).
 
 Hub shows **progressive unlock**: clear every drill in a chapter to open the next. Campaign plays all drills in order. Each game starts with a one-line teach tip.
 
 Throughput uses commonly taught approximate unidirectional numbers (Gen3 ≈ 1, Gen4 ≈ 2, Gen5 ≈ 4 GB/s per lane; aggregate ≈ per-lane × lanes). The Throughput Calc drill includes a peekable reference card.
+
+Retimer Reach uses approximate end-to-end channel loss budgets at Nyquist (Gen4 16 GT/s ≈ 28 dB @ 8 GHz, Gen5 32 GT/s ≈ 36 dB @ 16 GHz) and rough per-inch / connector losses — intuition, not a compliance calculator.
 
 ---
 

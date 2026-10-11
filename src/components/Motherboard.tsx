@@ -20,6 +20,7 @@ export const CHAPTER_ANCHORS: ChapterAnchor[] = [
   { chapter: 'attach', label: 'Attach', x: 48, y: 18, hint: 'CXL / DMI / NVMe' },
   { chapter: 'virtualization', label: 'Virtualization', x: 66, y: 64, hint: 'SR-IOV NIC' },
   { chapter: 'isolation', label: 'Isolation', x: 34, y: 62, hint: 'ACS / IOMMU' },
+  { chapter: 'signal', label: 'Signal', x: 54, y: 88, hint: 'retimers' },
 ];
 
 interface MotherboardProps {

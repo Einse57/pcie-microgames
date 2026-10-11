@@ -55,6 +55,12 @@ export const CHAPTERS: ChapterMeta[] = [
     blurb: 'Give a device its own IOMMU group, keep its DMA inside its VM, and flush stale ATS translations.',
     order: 8,
   },
+  {
+    id: 'signal',
+    title: '10 · Signal Integrity / Retimers',
+    blurb: 'Every inch of trace eats loss budget. Place the fewest retimers that still close the link.',
+    order: 9,
+  },
 ];
 
 export const MICROGAMES: MicrogameMeta[] = [
@@ -258,9 +264,19 @@ export const MICROGAMES: MicrogameMeta[] = [
     chapter: 'isolation',
     hubSlot: { label: 'IOMMU', x: 46, y: 30 },
   },
+  {
+    id: 'retimer-reach',
+    title: 'Retimer Reach',
+    tagline: 'Drop the fewest retimers so every sub-channel fits the Gen4 / Gen5 loss budget.',
+    concept: 'Channel loss & retimers',
+    tip: 'Higher GT/s means higher Nyquist frequency and more loss per inch. A retimer recovers clock and data and starts a fresh loss budget — but adds latency, power and cost, and a link allows at most two.',
+    seconds: 16,
+    chapter: 'signal',
+    hubSlot: { label: 'Retimer', x: 54, y: 88 },
+  },
 ];
 
-/** Full campaign order: Fundamentals \u2192 Bandwidth \u2192 Topology \u2192 Tradeoffs \u2192 Fabric \u2192 Drivers \u2192 Attach \u2192 Virtualization \u2192 Isolation */
+/** Full campaign order: Fundamentals \u2192 Bandwidth \u2192 Topology \u2192 Tradeoffs \u2192 Fabric \u2192 Drivers \u2192 Attach \u2192 Virtualization \u2192 Isolation \u2192 Signal integrity */
 export const CAMPAIGN_ORDER: MicrogameId[] = [
   'link-training',
   'packet-sort',
@@ -282,6 +298,7 @@ export const CAMPAIGN_ORDER: MicrogameId[] = [
   'sriov-vf',
   'acs-groups',
   'iova-map',
+  'retimer-reach',
 ];
 
 export function getMeta(id: MicrogameId): MicrogameMeta {

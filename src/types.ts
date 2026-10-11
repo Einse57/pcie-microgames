@@ -21,6 +21,7 @@ export type Screen =
   | 'sriov-vf'
   | 'acs-groups'
   | 'iova-map'
+  | 'retimer-reach'
   | 'result';
 
 export type MicrogameId =
@@ -43,7 +44,8 @@ export type MicrogameId =
   | 'cxl-type'
   | 'sriov-vf'
   | 'acs-groups'
-  | 'iova-map';
+  | 'iova-map'
+  | 'retimer-reach';
 
 export type ChapterId =
   | 'fundamentals'
@@ -54,7 +56,8 @@ export type ChapterId =
   | 'drivers'
   | 'attach'
   | 'virtualization'
-  | 'isolation';
+  | 'isolation'
+  | 'signal';
 
 export type GameOutcome = 'win' | 'lose' | null;
 
