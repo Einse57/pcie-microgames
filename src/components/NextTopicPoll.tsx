@@ -2,6 +2,10 @@ import { useState, type FormEvent } from 'react';
 
 const TOPICS = [
   { id: 'cxl-pooling', label: 'CXL memory pooling' },
+  { id: 'power-mgmt', label: 'Power management (ASPM/L-states)' },
+  { id: 'hot-plug', label: 'Hot-plug' },
+  { id: 'aer-deep-dive', label: 'Error injection / AER deep-dive' },
+  { id: 'gen6-pam4-flit', label: 'Gen6 PAM4/FLIT' },
   { id: 'other', label: 'Other' },
 ] as const;
 
