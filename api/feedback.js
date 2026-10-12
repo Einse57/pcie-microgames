@@ -11,6 +11,10 @@ const TOPICS = new Set([
   'retimers-si',
   'hotplug-pm',
   'acs-iommu',
+  'power-mgmt',
+  'hot-plug',
+  'aer-deep-dive',
+  'gen6-pam4-flit',
   'other',
 ]);
 
